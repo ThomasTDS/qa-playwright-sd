@@ -1,0 +1,25 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build outputs
+dist/
+build/
+
+# Playwright artifacts
+test-results/
+videos/
+screenshots/
+traces/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# TypeScript
+*.tsbuildinfo
+
+# VS Code
+.vscode/
