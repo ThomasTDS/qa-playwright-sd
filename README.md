@@ -13,16 +13,16 @@ O objetivo é demonstrar habilidades práticas de **QA Automation**, cobrindo fl
 
 ```text
 qa-playwright-sd/
-├── features/ # Cenários em Gherkin (.feature)
-├── steps/ # Implementação dos steps do Cucumber
-├── pages/ # Page Objects (LoginPage, CheckoutPage, ProductsPage)
-├── playwright-report/ # Relatórios HTML gerados automaticamente
-│ └── html/ # Relatório completo (index.html)
-├── generate-report.js # Script de geração do relatório
-├── cucumber.js # Configuração do Cucumber
-├── package.json # Dependências e scripts NPM
-├── tsconfig.json # Configuração do TypeScript
-└── README.md # Este arquivo
+├── features/              # Cenários em Gherkin (.feature)
+├── steps/                 # Implementação dos steps do Cucumber
+├── pages/                 # Page Objects (LoginPage, CheckoutPage, ProductsPage)
+├── playwright-report/     # Relatórios HTML gerados automaticamente
+│ └── html/                # Relatório completo (index.html)
+├── generate-report.js     # Script de geração do relatório
+├── cucumber.js            # Configuração do Cucumber
+├── package.json           # Dependências e scripts NPM
+├── tsconfig.json          # Configuração do TypeScript
+└── README.md              # Este arquivo
 
 ````
 
