@@ -1,23 +1,28 @@
-# QA Playwright + Cucumber - Saucedemo
+# 🧪 QA Playwright + Cucumber - Saucedemo
 
-### Descrição
-Este repositório contém testes automatizados do site [saucedemo.com](https://www.saucedemo.com) utilizando **Playwright**, **Cucumber (BDD/Gherkin)** e **Page Object Model (POM)**.  
-O objetivo é demonstrar habilidades em QA, cobrindo testes de login, validação de produtos, checkout e fluxos End-to-End (E2E) completos.
+## Descrição
+
+Este repositório contém testes automatizados do site **[saucedemo.com](https://www.saucedemo.com)** utilizando **Playwright**, **Cucumber (BDD/Gherkin)** e **Page Object Model (POM)**.
+
+O objetivo é demonstrar habilidades práticas de **QA Automation**, cobrindo fluxos de login, validação de produtos, checkout e testes End-to-End (E2E) completos — com relatórios HTML automáticos e rastreáveis.
 
 ---
 
-### Estrutura do Projeto
+## Estrutura do Projeto
+
 
 ```text
-playwright-cucumber/
-├── features/           # Cenários em Gherkin (.feature)
-├── steps/              # Implementação dos steps do Cucumber
-├── pages/              # Page Objects (LoginPage, CheckoutPage, ProductsPage)
-├── node_modules/       # Dependências do projeto
-├── package.json        # Dependências e scripts
-├── tsconfig.json       # Configurações do TypeScript
-├── cucumber.js         # Configurações do Cucumber
-└── README.md           # Este arquivo
+qa-playwright-sd/
+├── features/ # Cenários em Gherkin (.feature)
+├── steps/ # Implementação dos steps do Cucumber
+├── pages/ # Page Objects (LoginPage, CheckoutPage, ProductsPage)
+├── playwright-report/ # Relatórios HTML gerados automaticamente
+│ └── html/ # Relatório completo (index.html)
+├── generate-report.js # Script de geração do relatório
+├── cucumber.js # Configuração do Cucumber
+├── package.json # Dependências e scripts NPM
+├── tsconfig.json # Configuração do TypeScript
+└── README.md # Este arquivo
 
 ````
 
@@ -58,6 +63,18 @@ npx cucumber-js
 
 - Testes End-to-End (E2E): Simulação de fluxos reais de usuário, incluindo login, adicionar/remover produtos, filtros e checkout.
 
+- Relatórios HTML Automatizados: Geração via multiple-cucumber-html-reporter e que inclui dados de execução, tempo por step e metadados do ambiente. Facilita identificação de falhas e apresentação de resultados.
+
+-------------------
+
+### Gerar (ou abrir automaticamente) o relatório HTML
+
+````
+npm run report
+````
+
+**NOTA:** _O relatório é gerado automaticamente após os testes e salvo em playwright-report/html/index.html. Se quiser reabrir relatórios anteriores, basta abrir esse arquivo no navegador._
+
 -------------------
 
 ### Boas Práticas e Evidências
@@ -66,6 +83,7 @@ npx cucumber-js
 
 - Estrutura modular que facilita manutenção e evolução.
 
-- Preparado para evolução com relatórios HTML, traces e gravações de vídeo, deixando rastros claros do porquê um teste passou ou falhou.
+- Rastreabilidade total: vídeos, traces e relatórios visuais.
 
+- Base sólida para evolução futura e integração contínua (CI/CD).
 
