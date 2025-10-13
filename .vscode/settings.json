@@ -5,5 +5,6 @@
   "css.validate": true,
   "files.watcherExclude": {
     "**/playwright-report/html/**": true
-  }
+  },
+  "git.ignoreLimitWarning": true
 }
