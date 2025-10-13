@@ -1,0 +1,9 @@
+{
+  "files.exclude": {
+    "**/playwright-report/html": true
+  },
+  "css.validate": true,
+  "files.watcherExclude": {
+    "**/playwright-report/html/**": true
+  }
+}

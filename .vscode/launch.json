@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "chrome",
+            "name": "http://inventory_item_name ",
+            "request": "launch",
+            "url": "http://inventory_item_name "
+        }
+    ]
+}
