@@ -1,5 +1,7 @@
 # 🧪 QA Playwright + Cucumber - Saucedemo
 
+![tests](https://github.com/ThomasTDS/qa-playwright-sd/actions/workflows/tests.yml/badge.svg)
+
 ## Descrição
 
 Este repositório contém testes automatizados do site **[saucedemo.com](https://www.saucedemo.com)** utilizando **Playwright**, **Cucumber (BDD/Gherkin)** e **Page Object Model (POM)**.
@@ -46,7 +48,31 @@ npx playwright install
 ```
 npm test
 ````
-**NOTA:** _Por padrão, os testes estão configurados com headless = false, para visualizar o navegador. Para alterar, modifique a opção headless nos steps._
+**NOTA:** _Por padrão, os testes rodam com o navegador visível (headless = false). Para rodar em modo headless (ex.: como no CI), use a variável de ambiente `HEADLESS`:_
+
+```
+# PowerShell
+$env:HEADLESS="true"; npm test
+
+# bash
+HEADLESS=true npm test
+```
+
+### Rodar contra outra URL
+
+Por padrão os testes apontam para `https://www.saucedemo.com/`. Para rodar contra outro ambiente, defina `BASE_URL`:
+
+```
+# PowerShell
+$env:BASE_URL="https://outro-ambiente.com/"; npm test
+
+# bash
+BASE_URL=https://outro-ambiente.com/ npm test
+```
+
+### Relatório HTML
+
+Cada execução gera `reports/cucumber-report.html` (não versionado) com o resultado dos cenários. Testes que falham têm automaticamente um print da tela no momento da falha anexado ao relatório, para facilitar o diagnóstico.
 
 -------------------
 
@@ -68,11 +94,13 @@ npm test
 
 -------------------
 
+### CI/CD
+
+O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`) a cada push/PR para a `main` e diariamente às 06:00 UTC. O relatório HTML é publicado como artifact de cada execução. A `main` é protegida: mudanças precisam passar por Pull Request com o check de testes verde.
+
 ### Próximos Passos (Melhorias Futuras)
 
-- Relatórios HTML automatizados (ex.: multiple-cucumber-html-reporter).
+- Captura de vídeos e traces em falhas (hoje já há print de tela).
 
-- Captura de vídeos, screenshots e traces em falhas.
-
-- Integração contínua (CI/CD) rodando os testes a cada push.
+- Lint/format automatizado (ESLint + Prettier) no CI.
 
