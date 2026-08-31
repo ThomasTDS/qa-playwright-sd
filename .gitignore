@@ -26,3 +26,6 @@ reports/
 
 # VS Code
 .vscode/
+
+# Notas pessoais de sessão (não versionadas)
+docs/notas-sessao/
