@@ -15,9 +15,11 @@ O objetivo é demonstrar habilidades práticas de **QA Automation**, cobrindo fl
 
 ```text
 qa-playwright-sd/
+├── .github/workflows/     # Pipeline de CI (GitHub Actions)
 ├── features/              # Cenários em Gherkin (.feature)
 ├── steps/                 # Implementação dos steps do Cucumber
 ├── pages/                 # Page Objects (LoginPage, CheckoutPage, ProductsPage)
+├── reports/               # Relatório HTML gerado a cada execução (não versionado)
 ├── cucumber.js            # Configuração do Cucumber
 ├── package.json           # Dependências e scripts NPM
 ├── tsconfig.json          # Configuração do TypeScript
