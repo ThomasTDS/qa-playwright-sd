@@ -1,5 +1,7 @@
 import { Page, expect } from '@playwright/test';
 
+const BASE_URL = process.env.BASE_URL ?? 'https://www.saucedemo.com/';
+
 export class LoginPage {
   readonly page: Page;
 
@@ -8,7 +10,7 @@ export class LoginPage {
   }
 
   async goto() {
-    await this.page.goto('https://www.saucedemo.com/');
+    await this.page.goto(BASE_URL);
   }
 
   async login(username: string, password: string) {

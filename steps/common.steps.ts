@@ -1,4 +1,4 @@
-import { Given, When, Then, Before, After } from '@cucumber/cucumber';
+import { Given, When, Then, Before, After, Status } from '@cucumber/cucumber';
 import { chromium, Browser, Page } from 'playwright';
 import { LoginPage } from '../pages/login.page';
 import { ProductsPage } from '../pages/products.page';
@@ -13,14 +13,18 @@ let checkoutPage: CheckoutPage;
 
 // Hooks
 Before(async () => {
-  browser = await chromium.launch({ headless: false });
+  browser = await chromium.launch({ headless: process.env.HEADLESS === 'true' });
   page = await browser.newPage();
   loginPage = new LoginPage(page);
   productsPage = new ProductsPage(page);
   checkoutPage = new CheckoutPage(page);
 });
 
-After(async () => {
+After(async function (scenario) {
+  if (scenario.result?.status === Status.FAILED) {
+    const screenshot = await page.screenshot();
+    await this.attach(screenshot, 'image/png');
+  }
   await browser.close();
 });
 
