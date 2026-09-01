@@ -1,12 +1,14 @@
-# 🧪 QA Playwright + Cucumber - Saucedemo
+# 🧪 QA Playwright + Cucumber - Automation Exercise
 
 ![tests](https://github.com/ThomasTDS/qa-playwright-sd/actions/workflows/tests.yml/badge.svg)
 
 ## Descrição
 
-Este repositório contém testes automatizados do site **[saucedemo.com](https://www.saucedemo.com)** utilizando **Playwright**, **Cucumber (BDD/Gherkin)** e **Page Object Model (POM)**.
+Este repositório contém testes automatizados do site **[automationexercise.com](https://automationexercise.com)** utilizando **Playwright**, **Cucumber (BDD/Gherkin)** e **Page Object Model (POM)**.
 
-O objetivo é demonstrar habilidades práticas de **QA Automation**, cobrindo fluxos de login, validação de produtos, checkout e testes End-to-End (E2E) completos.
+O objetivo é demonstrar habilidades práticas de **QA Automation**, cobrindo fluxos de login, cadastro, produtos, carrinho e checkout com testes End-to-End (E2E).
+
+> **Status:** projeto em migração incremental (era baseado no saucedemo.com, mais simples). Cobertura atual: login e cadastro. Produtos/carrinho e checkout estão planejados — veja "Próximos Passos".
 
 ---
 
@@ -18,7 +20,7 @@ qa-playwright-sd/
 ├── .github/workflows/     # Pipeline de CI (GitHub Actions)
 ├── features/              # Cenários em Gherkin (.feature)
 ├── steps/                 # Implementação dos steps do Cucumber
-├── pages/                 # Page Objects (LoginPage, CheckoutPage, ProductsPage)
+├── pages/                 # Page Objects (LoginPage, RegisterPage, ...)
 ├── reports/               # Relatório HTML gerado a cada execução (não versionado)
 ├── cucumber.js            # Configuração do Cucumber
 ├── package.json           # Dependências e scripts NPM
@@ -62,7 +64,7 @@ HEADLESS=true npm test
 
 ### Rodar contra outra URL
 
-Por padrão os testes apontam para `https://www.saucedemo.com/`. Para rodar contra outro ambiente, defina `BASE_URL`:
+Por padrão os testes apontam para `https://automationexercise.com/`. Para rodar contra outro ambiente, defina `BASE_URL`:
 
 ```
 # PowerShell
@@ -71,6 +73,19 @@ $env:BASE_URL="https://outro-ambiente.com/"; npm test
 # bash
 BASE_URL=https://outro-ambiente.com/ npm test
 ```
+
+### Configuração de credenciais (.env)
+
+Os cenários de login usam uma conta já existente no automationexercise.com, definida por variável de ambiente (nunca hardcoded no código). Copie `.env.example` para `.env` (arquivo não versionado) e preencha:
+
+```
+BASE_URL=https://automationexercise.com/
+HEADLESS=false
+TEST_USER_EMAIL=
+TEST_USER_PASSWORD=
+```
+
+No CI, essas mesmas variáveis vêm de GitHub Secrets (`TEST_USER_EMAIL`/`TEST_USER_PASSWORD`), configurados no repositório.
 
 ### Relatório HTML
 
@@ -84,7 +99,7 @@ Cada execução gera `reports/cucumber-report.html` (não versionado) com o resu
 
 - Page Object Model (POM): Separação de responsabilidades, com Pages encapsulando elementos e ações.
 
-- Testes End-to-End (E2E): Simulação de fluxos reais de usuário, incluindo login, adicionar/remover produtos, filtros e checkout.
+- Testes End-to-End (E2E): Simulação de fluxos reais de usuário — login e cadastro implementados; produtos/carrinho e checkout planejados.
 
 -------------------
 
@@ -102,7 +117,9 @@ O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`
 
 ### Próximos Passos (Melhorias Futuras)
 
+- Cobertura de Produtos/Carrinho (busca, adicionar/remover, carrinho).
+- Cobertura de Checkout (pagamento fake, confirmação de pedido).
+- Cobertura de Contact Us / Newsletter.
 - Captura de vídeos e traces em falhas (hoje já há print de tela).
-
 - Lint/format automatizado (ESLint + Prettier) no CI.
 

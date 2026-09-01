@@ -1,23 +1,19 @@
 import { Given, When, Then, Before, After, Status } from '@cucumber/cucumber';
 import { chromium, Browser, Page } from 'playwright';
 import { LoginPage } from '../pages/login.page';
-import { ProductsPage } from '../pages/products.page';
-import { CheckoutPage } from '../pages/checkout.page';
-import { expect } from '@playwright/test';
+import { RegisterPage } from '../pages/register.page';
 
 let browser: Browser;
 let page: Page;
 let loginPage: LoginPage;
-let productsPage: ProductsPage;
-let checkoutPage: CheckoutPage;
+let registerPage: RegisterPage;
 
 // Hooks
 Before(async () => {
   browser = await chromium.launch({ headless: process.env.HEADLESS === 'true' });
   page = await browser.newPage();
   loginPage = new LoginPage(page);
-  productsPage = new ProductsPage(page);
-  checkoutPage = new CheckoutPage(page);
+  registerPage = new RegisterPage(page);
 });
 
 After(async function (scenario) {
@@ -33,11 +29,15 @@ Given('que o usuário está na página de login', async () => {
   await loginPage.goto();
 });
 
-When('ele insere o usuário {string} e a senha {string}', async (username: string, password: string) => {
-  await loginPage.login(username, password);
+When('ele faz login com a conta de teste', async () => {
+  await loginPage.loginWithTestUser();
 });
 
-Then('ele deve ser redirecionado para a página de inventário', async () => {
+When('ele insere o e-mail {string} e a senha {string}', async (email: string, password: string) => {
+  await loginPage.login(email, password);
+});
+
+Then('ele deve ver que está logado', async () => {
   await loginPage.assertLoggedIn();
 });
 
@@ -45,56 +45,29 @@ Then('ele deve ver a mensagem de erro {string}', async (expectedMessage: string)
   await loginPage.assertErrorMessage(expectedMessage);
 });
 
-// COMMON LOGIN STEP (reutilizado)
-Given('que o usuário está logado com {string} e {string}', async (username: string, password: string) => {
-  await loginPage.goto();
-  await loginPage.login(username, password);
-  await loginPage.assertLoggedIn();
+// REGISTRATION STEPS
+When('ele se cadastra com um e-mail novo', async () => {
+  const uniqueEmail = `qa-playwright-sd-${Date.now()}@mailinator.com`;
+  await registerPage.startSignup('QA Playwright SD', uniqueEmail);
+  await registerPage.fillAccountInformation({
+    password: 'SenhaDeTeste123',
+    firstName: 'QA',
+    lastName: 'Playwright',
+    company: 'qa-playwright-sd',
+    address: 'Rua de Teste, 123',
+    state: 'SP',
+    city: 'Sao Paulo',
+    zipcode: '01000-000',
+    mobileNumber: '11999999999',
+    country: 'Canada',
+  });
 });
 
-// PRODUCTS STEPS
-When('ele adiciona os produtos {string} e {string} ao carrinho', async (product1: string, product2: string) => {
-  await checkoutPage.addProductToCart(product1);
-  await checkoutPage.addProductToCart(product2);
+Then('ele deve ver a mensagem {string}', async (expectedMessage: string) => {
+  await registerPage.assertAccountCreated(expectedMessage);
 });
 
-When('ele adiciona o produto {string} ao carrinho', async (productName: string) => {
-  await checkoutPage.addProductToCart(productName);
-});
-
-When('ele remove o produto {string} do carrinho', async (productName: string) => {
-  const selector = `[data-test="remove-${productName.toLowerCase().replace(/ /g, '-')}"]`;
-  await page.locator(selector).click();
-});
-
-Then('ele deve ver o produto {string} no carrinho', async (productName: string) => {
-  await checkoutPage.assertProductInCart(productName);
-});
-
-// SORT PRODUCTS
-When('ele filtra os produtos por {string}', async (option: string) => {
-  await productsPage.sortProducts(option);
-});
-
-Then('os produtos devem aparecer em ordem decrescente de nome', async () => {
-  await productsPage.assertSortedByNameDesc();
-});
-
-// CHECKOUT STEPS
-When('ele finaliza o checkout com informações {string}, {string}, {string}', async (firstName: string, lastName: string, postalCode: string) => {
-  await checkoutPage.checkout(firstName, lastName, postalCode);
-});
-
-Then('ele deve ver a mensagem de confirmação {string}', async (expectedMessage: string) => {
-  await checkoutPage.assertOrderComplete(expectedMessage);
-});
-
-When('ele tenta finalizar o checkout sem preencher informações obrigatórias', async () => {
-  await page.locator('[data-test="shopping-cart-link"]').click();
-  await page.locator('[data-test="checkout"]').click();
-  await page.locator('[data-test="continue"]').click();
-});
-
-Then('ele deve ver uma mensagem de erro {string}', async (expectedMessage: string) => {
-  await checkoutPage.assertErrorMessage(expectedMessage);
+Then('a conta criada deve poder ser removida', async () => {
+  await registerPage.continueAfterAccountCreated();
+  await registerPage.deleteAccount();
 });
