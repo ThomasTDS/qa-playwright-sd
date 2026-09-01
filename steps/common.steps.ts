@@ -1,12 +1,18 @@
-import { Given, When, Then, Before, After, Status } from '@cucumber/cucumber';
+import { Given, When, Then, Before, After, Status, setDefaultTimeout } from '@cucumber/cucumber';
 import { chromium, Browser, Page } from 'playwright';
 import { LoginPage } from '../pages/login.page';
 import { RegisterPage } from '../pages/register.page';
+import { ProductsPage } from '../pages/products.page';
+import { CartPage } from '../pages/cart.page';
+
+setDefaultTimeout(20000);
 
 let browser: Browser;
 let page: Page;
 let loginPage: LoginPage;
 let registerPage: RegisterPage;
+let productsPage: ProductsPage;
+let cartPage: CartPage;
 
 // Hooks
 Before(async () => {
@@ -14,6 +20,8 @@ Before(async () => {
   page = await browser.newPage();
   loginPage = new LoginPage(page);
   registerPage = new RegisterPage(page);
+  productsPage = new ProductsPage(page);
+  cartPage = new CartPage(page);
 });
 
 After(async function (scenario) {
@@ -70,4 +78,44 @@ Then('ele deve ver a mensagem {string}', async (expectedMessage: string) => {
 Then('a conta criada deve poder ser removida', async () => {
   await registerPage.continueAfterAccountCreated();
   await registerPage.deleteAccount();
+});
+
+// PRODUCTS STEPS
+Given('que o usuário está na página de produtos', async () => {
+  await productsPage.goto();
+});
+
+When('ele busca por {string}', async (term: string) => {
+  await productsPage.search(term);
+});
+
+Then('ele deve ver resultados da busca', async () => {
+  await productsPage.assertSearchResultsVisible();
+});
+
+When('ele adiciona os produtos {string} e {string} ao carrinho', async (product1: string, product2: string) => {
+  await productsPage.addProductToCart(product1);
+  await productsPage.addProductToCart(product2);
+});
+
+// CART STEPS
+When('ele acessa o carrinho', async () => {
+  await cartPage.goto();
+});
+
+Then('ele deve ver os produtos {string} e {string} no carrinho', async (product1: string, product2: string) => {
+  await cartPage.assertProductInCart(product1);
+  await cartPage.assertProductInCart(product2);
+});
+
+When('ele remove o produto {string} do carrinho', async (productName: string) => {
+  await cartPage.removeProduct(productName);
+});
+
+Then('ele não deve ver o produto {string} no carrinho', async (productName: string) => {
+  await cartPage.assertProductNotInCart(productName);
+});
+
+Then('ele deve ver o produto {string} no carrinho', async (productName: string) => {
+  await cartPage.assertProductInCart(productName);
 });
