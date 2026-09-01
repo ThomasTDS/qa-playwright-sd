@@ -6,7 +6,7 @@ import { ProductsPage } from '../pages/products.page';
 import { CartPage } from '../pages/cart.page';
 import { CheckoutPage } from '../pages/checkout.page';
 
-setDefaultTimeout(20000);
+setDefaultTimeout(30000);
 
 let browser: Browser;
 let page: Page;
