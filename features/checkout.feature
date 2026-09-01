@@ -7,7 +7,8 @@ Feature: Checkout no Automation Exercise
     And ele adiciona o produto "Blue Top" ao carrinho
     And ele acessa o carrinho
     And ele prossegue para o checkout
-    And ele finaliza o pedido com um cartão de teste
+    And ele confirma o pedido
+    And ele preenche o pagamento com um cartão de teste
     Then ele deve ver a confirmação do pedido
 
   Scenario: Tentar finalizar checkout sem estar logado

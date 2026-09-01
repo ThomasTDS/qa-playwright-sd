@@ -132,8 +132,11 @@ When('ele prossegue para o checkout', async () => {
   await checkoutPage.proceedToCheckout();
 });
 
-When('ele finaliza o pedido com um cartão de teste', async () => {
+When('ele confirma o pedido', async () => {
   await checkoutPage.placeOrder();
+});
+
+When('ele preenche o pagamento com um cartão de teste', async () => {
   await checkoutPage.fillPayment({
     nameOnCard: 'QA Playwright',
     cardNumber: '4111111111111111',
