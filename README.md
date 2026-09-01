@@ -8,7 +8,7 @@ Este repositório contém testes automatizados do site **[automationexercise.com
 
 O objetivo é demonstrar habilidades práticas de **QA Automation**, cobrindo fluxos de login, cadastro, produtos, carrinho e checkout com testes End-to-End (E2E).
 
-> **Status:** projeto em migração incremental (era baseado no saucedemo.com, mais simples). Cobertura atual: login, cadastro, busca de produtos e carrinho. Checkout está planejado — veja "Próximos Passos".
+> **Status:** migração concluída (era baseado no saucedemo.com, mais simples). Cobertura atual: login, cadastro, busca de produtos, carrinho e checkout.
 
 ---
 
@@ -99,7 +99,7 @@ Cada execução gera `reports/cucumber-report.html` (não versionado) com o resu
 
 - Page Object Model (POM): Separação de responsabilidades, com Pages encapsulando elementos e ações.
 
-- Testes End-to-End (E2E): Simulação de fluxos reais de usuário — login, cadastro, busca de produtos e carrinho implementados; checkout planejado.
+- Testes End-to-End (E2E): Simulação de fluxos reais de usuário — login, cadastro, busca de produtos, carrinho e checkout.
 
 -------------------
 
@@ -117,7 +117,6 @@ O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`
 
 ### Próximos Passos (Melhorias Futuras)
 
-- Cobertura de Checkout (pagamento fake, confirmação de pedido).
 - Cobertura de Contact Us / Newsletter.
 - Captura de vídeos e traces em falhas (hoje já há print de tela).
 - Lint/format automatizado (ESLint + Prettier) no CI.
