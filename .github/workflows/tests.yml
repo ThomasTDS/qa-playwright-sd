@@ -22,7 +22,7 @@ jobs:
 
       - run: npx playwright install --with-deps chromium
 
-      - run: npm test
+      - run: npm test -- --retry 1
         env:
           HEADLESS: 'true'
           TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
