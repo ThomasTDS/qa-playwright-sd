@@ -5,6 +5,7 @@ import { RegisterPage } from '../pages/register.page';
 import { ProductsPage } from '../pages/products.page';
 import { CartPage } from '../pages/cart.page';
 import { CheckoutPage } from '../pages/checkout.page';
+import { ContactPage } from '../pages/contact.page';
 
 setDefaultTimeout(30000);
 
@@ -15,6 +16,7 @@ let registerPage: RegisterPage;
 let productsPage: ProductsPage;
 let cartPage: CartPage;
 let checkoutPage: CheckoutPage;
+let contactPage: ContactPage;
 
 // Hooks
 Before(async () => {
@@ -25,6 +27,7 @@ Before(async () => {
   productsPage = new ProductsPage(page);
   cartPage = new CartPage(page);
   checkoutPage = new CheckoutPage(page);
+  contactPage = new ContactPage(page);
 });
 
 After(async function (scenario) {
@@ -152,4 +155,29 @@ Then('ele deve ver a confirmação do pedido', async () => {
 
 Then('ele deve ver a mensagem pedindo para fazer login', async () => {
   await checkoutPage.assertLoginRequiredMessage();
+});
+
+// CONTACT / NEWSLETTER STEPS
+Given('que o usuário está na página de contato', async () => {
+  await contactPage.goto();
+});
+
+Given('que o usuário está na página inicial', async () => {
+  await contactPage.gotoHome();
+});
+
+When('ele envia o formulário de contato com {string}, {string}, {string} e {string}', async (name: string, email: string, subject: string, message: string) => {
+  await contactPage.submitForm(name, email, subject, message);
+});
+
+Then('ele deve ver a confirmação de envio do formulário', async () => {
+  await contactPage.assertMessageSent();
+});
+
+When('ele se inscreve na newsletter com o e-mail {string}', async (email: string) => {
+  await contactPage.subscribeToNewsletter(email);
+});
+
+Then('ele deve ver a confirmação da inscrição', async () => {
+  await contactPage.assertSubscribed();
 });
