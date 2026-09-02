@@ -16,7 +16,7 @@ Um cenário com `Scenario Outline`/`Examples` (parametrizado) conta como **um ú
 | TC-008 | Checkout | Tentar finalizar checkout sem estar logado | Negativo | Alta | Automatizado | `features/checkout.feature` |
 | TC-009 | Contato | Enviar formulário de contato com sucesso | Funcional | Média | Automatizado | `features/contact.feature` |
 | TC-010 | Newsletter | Inscrever e-mail na newsletter com sucesso | Funcional | Baixa | Automatizado | `features/contact.feature` |
-| TC-011 | Sessão | Logout | Funcional | Média | Planejado | — |
+| TC-011 | Sessão | Logout | Funcional | Média | Automatizado | `features/login.feature` |
 
 ## Smoke
 

@@ -18,3 +18,10 @@ Feature: Login e cadastro no Automation Exercise
     When ele se cadastra com um e-mail novo
     Then ele deve ver a mensagem "ACCOUNT CREATED!"
     And a conta criada deve poder ser removida
+
+  @TC-011
+  Scenario: Logout
+    Given que o usuário está na página de login
+    When ele faz login com a conta de teste
+    And ele faz logout
+    Then ele deve ver que está deslogado
