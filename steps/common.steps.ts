@@ -59,6 +59,14 @@ Then('ele deve ver a mensagem de erro {string}', async (expectedMessage: string)
   await loginPage.assertErrorMessage(expectedMessage);
 });
 
+When('ele faz logout', async () => {
+  await loginPage.logout();
+});
+
+Then('ele deve ver que está deslogado', async () => {
+  await loginPage.assertLoggedOut();
+});
+
 // REGISTRATION STEPS
 When('ele se cadastra com um e-mail novo', async () => {
   const uniqueEmail = `qa-playwright-sd-${Date.now()}@mailinator.com`;

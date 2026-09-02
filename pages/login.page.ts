@@ -35,4 +35,13 @@ export class LoginPage {
   async assertErrorMessage(expectedError: string) {
     await expect(this.page.locator('.login-form p')).toHaveText(expectedError);
   }
+
+  async logout() {
+    await this.page.locator('a[href="/logout"]').click();
+  }
+
+  async assertLoggedOut() {
+    await expect(this.page).toHaveURL(/\/login$/);
+    await expect(this.page.locator('a:has-text("Logged in as")')).toHaveCount(0);
+  }
 }
