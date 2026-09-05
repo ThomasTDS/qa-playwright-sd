@@ -17,12 +17,17 @@ O objetivo é demonstrar habilidades práticas de **QA Automation**, cobrindo fl
 
 ```text
 qa-playwright-sd/
-├── .github/workflows/     # Pipeline de CI (GitHub Actions)
+├── .github/
+│   ├── workflows/         # Pipeline de CI (GitHub Actions)
+│   ├── ISSUE_TEMPLATE/    # Template de bug report
+│   └── dependabot.yml     # Atualização automática de dependências
+├── docs/                  # Matriz de rastreabilidade de test cases
 ├── features/              # Cenários em Gherkin (.feature)
 ├── steps/                 # Implementação dos steps do Cucumber
 ├── pages/                 # Page Objects (LoginPage, RegisterPage, ...)
 ├── reports/               # Relatório HTML gerado a cada execução (não versionado)
 ├── cucumber.js            # Configuração do Cucumber
+├── .env.example           # Modelo de variáveis de ambiente
 ├── package.json           # Dependências e scripts NPM
 ├── tsconfig.json          # Configuração do TypeScript
 └── README.md              # Este arquivo
@@ -60,6 +65,14 @@ $env:HEADLESS="true"; npm test
 
 # bash
 HEADLESS=true npm test
+```
+
+### Rodar só o subconjunto de smoke
+
+Cenários críticos ponta-a-ponta são marcados com a tag `@smoke`. Para rodar só esse subconjunto:
+
+```
+npm run test:smoke
 ```
 
 ### Rodar contra outra URL
@@ -105,6 +118,14 @@ Cada execução gera `reports/cucumber-report.html` (não versionado) com o resu
 
 -------------------
 
+### Documentação de QA
+
+- Template de bug report em `.github/ISSUE_TEMPLATE/bug_report.md`, com severidade (impacto técnico) e prioridade (urgência de correção) tratadas como campos separados, e causa raiz preenchida só após investigação real.
+
+- Matriz de rastreabilidade em `docs/test-cases.md`, ligando cada test case ao cenário `.feature` correspondente via tag `@TC-XXX`.
+
+-------------------
+
 ### Boas Práticas Aplicadas
 
 - Validação de elementos com expect.
@@ -115,7 +136,7 @@ Cada execução gera `reports/cucumber-report.html` (não versionado) com o resu
 
 ### CI/CD
 
-O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`) a cada push/PR para a `main` e diariamente às 06:00 UTC. O relatório HTML é publicado como artifact de cada execução. A `main` é protegida: mudanças precisam passar por Pull Request com o check de testes verde.
+O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`) a cada push/PR para a `main` e diariamente às 06:00 UTC. O relatório HTML é publicado como artifact de cada execução. A `main` é protegida: mudanças precisam passar por Pull Request com o check de testes verde. Cenários que falham são reexecutados automaticamente uma vez (`--retry 1`), para absorver instabilidades pontuais de rede sem mascarar bugs reais de código.
 
 ### Segurança da pipeline
 
