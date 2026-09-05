@@ -6,9 +6,9 @@
 
 Este repositório contém testes automatizados do site **[automationexercise.com](https://automationexercise.com)** utilizando **Playwright**, **Cucumber (BDD/Gherkin)** e **Page Object Model (POM)**.
 
-O objetivo é demonstrar habilidades práticas de **QA Automation**, cobrindo fluxos de login, cadastro, logout, produtos, carrinho, checkout, contato e newsletter com testes End-to-End (E2E).
+O objetivo é demonstrar habilidades práticas de **QA Automation**, cobrindo fluxos de login, cadastro, logout, produtos, carrinho, checkout, contato, newsletter e verificações de segurança passivas com testes End-to-End (E2E).
 
-> **Status:** migração concluída (era baseado no saucedemo.com, mais simples). Cobertura atual: login, cadastro, logout, busca de produtos, carrinho, checkout, contato e newsletter.
+> **Status:** migração concluída (era baseado no saucedemo.com, mais simples). Cobertura atual: login, cadastro, logout, busca de produtos, carrinho, checkout, contato, newsletter e segurança (headers, HTTPS, cookies).
 
 ---
 
@@ -101,6 +101,8 @@ Cada execução gera `reports/cucumber-report.html` (não versionado) com o resu
 
 - Testes End-to-End (E2E): Simulação de fluxos reais de usuário — login, cadastro, logout, busca de produtos, carrinho, checkout, contato e newsletter.
 
+- QA de Segurança (passivo/defensivo): cabeçalhos de segurança HTTP, redirecionamento forçado para HTTPS, mascaramento de campo de senha e flag `HttpOnly` do cookie de sessão. Sem tentativas de exploração ativa contra a aplicação de terceiros — só observação do que ela já expõe publicamente.
+
 -------------------
 
 ### Boas Práticas Aplicadas
@@ -114,6 +116,11 @@ Cada execução gera `reports/cucumber-report.html` (não versionado) com o resu
 ### CI/CD
 
 O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`) a cada push/PR para a `main` e diariamente às 06:00 UTC. O relatório HTML é publicado como artifact de cada execução. A `main` é protegida: mudanças precisam passar por Pull Request com o check de testes verde.
+
+### Segurança da pipeline
+
+- `npm audit --audit-level=high` roda no CI a cada execução, quebrando o build se houver vulnerabilidade alta/crítica em dependências.
+- **Dependabot** ativo (`.github/dependabot.yml`): atualizações automáticas semanais de dependências npm e das actions do workflow, além de alertas de segurança nativos do GitHub.
 
 ### Próximos Passos (Melhorias Futuras)
 
