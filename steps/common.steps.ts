@@ -6,6 +6,7 @@ import { ProductsPage } from '../pages/products.page';
 import { CartPage } from '../pages/cart.page';
 import { CheckoutPage } from '../pages/checkout.page';
 import { ContactPage } from '../pages/contact.page';
+import { SecurityPage } from '../pages/security.page';
 
 setDefaultTimeout(30000);
 
@@ -17,6 +18,7 @@ let productsPage: ProductsPage;
 let cartPage: CartPage;
 let checkoutPage: CheckoutPage;
 let contactPage: ContactPage;
+let securityPage: SecurityPage;
 
 // Hooks
 Before(async () => {
@@ -28,6 +30,7 @@ Before(async () => {
   cartPage = new CartPage(page);
   checkoutPage = new CheckoutPage(page);
   contactPage = new ContactPage(page);
+  securityPage = new SecurityPage(page);
 });
 
 After(async function (scenario) {
@@ -188,4 +191,21 @@ When('ele se inscreve na newsletter com o e-mail {string}', async (email: string
 
 Then('ele deve ver a confirmação da inscrição', async () => {
   await contactPage.assertSubscribed();
+});
+
+// SECURITY STEPS
+Then('a aplicação deve responder com os cabeçalhos de segurança esperados', async () => {
+  await securityPage.assertSecurityHeadersPresent();
+});
+
+Then('o acesso via HTTP deve ser redirecionado para HTTPS', async () => {
+  await securityPage.assertHttpRedirectsToHttps();
+});
+
+Then('o campo de senha deve ser do tipo password', async () => {
+  await securityPage.assertPasswordFieldIsMasked();
+});
+
+Then('o cookie de sessão deve ter a flag HttpOnly ativada', async () => {
+  await securityPage.assertSessionCookieIsHttpOnly();
 });

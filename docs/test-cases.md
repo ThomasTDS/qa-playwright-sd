@@ -17,6 +17,10 @@ Um cenário com `Scenario Outline`/`Examples` (parametrizado) conta como **um ú
 | TC-009 | Contato | Enviar formulário de contato com sucesso | Funcional | Média | Automatizado | `features/contact.feature` |
 | TC-010 | Newsletter | Inscrever e-mail na newsletter com sucesso | Funcional | Baixa | Automatizado | `features/contact.feature` |
 | TC-011 | Sessão | Logout | Funcional | Média | Automatizado | `features/login.feature` |
+| TC-012 | Segurança | Cabeçalhos de segurança HTTP presentes (X-Frame-Options, X-Content-Type-Options) | Funcional | Alta | Automatizado | `features/security.feature` |
+| TC-013 | Segurança | Redirecionamento HTTP para HTTPS | Funcional | Alta | Automatizado | `features/security.feature` |
+| TC-014 | Segurança | Campo de senha deve estar mascarado | Funcional | Média | Automatizado | `features/security.feature` |
+| TC-015 | Segurança | Cookie de sessão deve ter a flag HttpOnly ativada | Funcional | Alta | Automatizado | `features/security.feature` |
 
 ## Smoke
 
