@@ -24,7 +24,9 @@ export class ProductsPage {
   }
 
   async addProductToCart(productName: string) {
-    const productCard = this.page.locator('.product-image-wrapper').filter({ hasText: productName });
+    const productCard = this.page
+      .locator('.product-image-wrapper')
+      .filter({ hasText: productName });
     await productCard.locator('.productinfo .add-to-cart').click();
     await this.page.locator('button.close-modal[data-dismiss="modal"]').click();
   }

@@ -28,7 +28,11 @@ export class ContactPage {
   }
 
   async assertMessageSent() {
-    await expect(this.page.locator('#contact-page').getByText('Success! Your details have been submitted successfully.')).toBeVisible();
+    await expect(
+      this.page
+        .locator('#contact-page')
+        .getByText('Success! Your details have been submitted successfully.')
+    ).toBeVisible();
   }
 
   async subscribeToNewsletter(email: string) {
@@ -42,6 +46,8 @@ export class ContactPage {
   }
 
   async assertSubscribed() {
-    await expect(this.page.locator('#success-subscribe')).toHaveText('You have been successfully subscribed!');
+    await expect(this.page.locator('#success-subscribe')).toHaveText(
+      'You have been successfully subscribed!'
+    );
   }
 }
