@@ -1,6 +1,8 @@
 # 🧪 QA Playwright + Cucumber - Automation Exercise
 
 ![tests](https://github.com/ThomasTDS/qa-playwright-sd/actions/workflows/tests.yml/badge.svg)
+![license](https://img.shields.io/badge/license-MIT-blue.svg)
+![node](https://img.shields.io/badge/node-%3E%3D22-brightgreen.svg)
 
 ## Descrição
 
@@ -31,6 +33,7 @@ qa-playwright-sd/
 ├── .env.example           # Modelo de variáveis de ambiente
 ├── package.json           # Dependências e scripts NPM
 ├── tsconfig.json          # Configuração do TypeScript
+├── LICENSE                # Licença MIT
 └── README.md              # Este arquivo
 
 ```
@@ -46,6 +49,8 @@ cd qa-playwright-sd
 ```
 
 ### Instalar Dependências
+
+Requer Node.js 22 ou superior (`engines` no `package.json`).
 
 ```
 npm install
@@ -90,6 +95,7 @@ npm run lint          # verifica problemas de lint
 npm run lint:fix      # corrige o que for possível automaticamente
 npm run format        # formata todos os arquivos com Prettier
 npm run format:check  # só verifica, sem alterar (usado no CI)
+npm run typecheck     # verifica erros de tipos do TypeScript (sem gerar arquivos)
 ```
 
 ### Rodar contra outra URL
@@ -153,7 +159,7 @@ Cada execução gera `reports/cucumber-report.html` (não versionado) com o resu
 
 ### CI/CD
 
-O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`) a cada push/PR para a `main` e diariamente às 06:00 UTC. Antes dos testes, o CI valida lint (`eslint`) e formatação (`prettier --check`), quebrando o build se algo estiver fora do padrão. O relatório HTML é publicado como artifact de cada execução. A `main` é protegida: mudanças precisam passar por Pull Request com o check de testes verde. Cenários que falham são reexecutados automaticamente uma vez (`--retry 1`), para absorver instabilidades pontuais de rede sem mascarar bugs reais de código.
+O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`) a cada push/PR para a `main` e diariamente às 06:00 UTC. Antes dos testes, o CI valida lint (`eslint`), formatação (`prettier --check`) e tipos (`tsc --noEmit`), quebrando o build se algo estiver fora do padrão. O relatório HTML é publicado como artifact de cada execução. A `main` é protegida: mudanças precisam passar por Pull Request com o check de testes verde. Cenários que falham são reexecutados automaticamente uma vez (`--retry 1`), para absorver instabilidades pontuais de rede sem mascarar bugs reais de código.
 
 ### Segurança da pipeline
 
@@ -163,3 +169,9 @@ O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`
 ### Próximos Passos (Melhorias Futuras)
 
 - Captura de vídeos e traces em falhas (hoje já há print de tela).
+
+---
+
+## Licença
+
+Distribuído sob a licença MIT. Veja [LICENSE](LICENSE) para mais detalhes.
