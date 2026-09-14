@@ -23,7 +23,9 @@ export class LoginPage {
     const email = process.env.TEST_USER_EMAIL;
     const password = process.env.TEST_USER_PASSWORD;
     if (!email || !password) {
-      throw new Error('TEST_USER_EMAIL e TEST_USER_PASSWORD precisam estar definidos (veja .env.example)');
+      throw new Error(
+        'TEST_USER_EMAIL e TEST_USER_PASSWORD precisam estar definidos (veja .env.example)'
+      );
     }
     await this.login(email, password);
   }

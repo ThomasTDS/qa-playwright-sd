@@ -22,6 +22,10 @@ export class CartPage {
   }
 
   async removeProduct(productName: string) {
-    await this.page.locator('tr').filter({ hasText: productName }).locator('.cart_quantity_delete').click();
+    await this.page
+      .locator('tr')
+      .filter({ hasText: productName })
+      .locator('.cart_quantity_delete')
+      .click();
   }
 }

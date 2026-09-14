@@ -14,7 +14,6 @@ O objetivo é demonstrar habilidades práticas de **QA Automation**, cobrindo fl
 
 ## Estrutura do Projeto
 
-
 ```text
 qa-playwright-sd/
 ├── .github/
@@ -27,16 +26,19 @@ qa-playwright-sd/
 ├── pages/                 # Page Objects (LoginPage, RegisterPage, ...)
 ├── reports/               # Relatório HTML gerado a cada execução (não versionado)
 ├── cucumber.js            # Configuração do Cucumber
+├── eslint.config.js       # Configuração do ESLint
+├── .prettierrc.json       # Configuração do Prettier
 ├── .env.example           # Modelo de variáveis de ambiente
 ├── package.json           # Dependências e scripts NPM
 ├── tsconfig.json          # Configuração do TypeScript
 └── README.md              # Este arquivo
 
-````
+```
 
---------------------
+---
 
 ### Clonar Repositório
+
 ```
 git clone https://github.com/ThomasTDS/qa-playwright-sd.git
 
@@ -44,19 +46,23 @@ cd qa-playwright-sd
 ```
 
 ### Instalar Dependências
+
 ```
 npm install
 ```
 
 ### Instalar navegadores do Playwright
+
 ```
 npx playwright install
 ```
 
 ### Rodar todos os testes
+
 ```
 npm test
-````
+```
+
 **NOTA:** _Por padrão, os testes rodam com o navegador visível (headless = false). Para rodar em modo headless (ex.: como no CI), use a variável de ambiente `HEADLESS`:_
 
 ```
@@ -73,6 +79,17 @@ Cenários críticos ponta-a-ponta são marcados com a tag `@smoke`. Para rodar s
 
 ```
 npm run test:smoke
+```
+
+### Lint e formatação
+
+O projeto usa **ESLint** (qualidade/erros de código) e **Prettier** (formatação consistente):
+
+```
+npm run lint          # verifica problemas de lint
+npm run lint:fix      # corrige o que for possível automaticamente
+npm run format        # formata todos os arquivos com Prettier
+npm run format:check  # só verifica, sem alterar (usado no CI)
 ```
 
 ### Rodar contra outra URL
@@ -104,7 +121,7 @@ No CI, essas mesmas variáveis vêm de GitHub Secrets (`TEST_USER_EMAIL`/`TEST_U
 
 Cada execução gera `reports/cucumber-report.html` (não versionado) com o resultado dos cenários. Testes que falham têm automaticamente um print da tela no momento da falha anexado ao relatório, para facilitar o diagnóstico.
 
--------------------
+---
 
 ### Estrutura de Testes e Padrões Aplicados
 
@@ -116,7 +133,7 @@ Cada execução gera `reports/cucumber-report.html` (não versionado) com o resu
 
 - QA de Segurança (passivo/defensivo): cabeçalhos de segurança HTTP, redirecionamento forçado para HTTPS, mascaramento de campo de senha e flag `HttpOnly` do cookie de sessão. Sem tentativas de exploração ativa contra a aplicação de terceiros — só observação do que ela já expõe publicamente.
 
--------------------
+---
 
 ### Documentação de QA
 
@@ -124,7 +141,7 @@ Cada execução gera `reports/cucumber-report.html` (não versionado) com o resu
 
 - Matriz de rastreabilidade em `docs/test-cases.md`, ligando cada test case ao cenário `.feature` correspondente via tag `@TC-XXX`.
 
--------------------
+---
 
 ### Boas Práticas Aplicadas
 
@@ -132,11 +149,11 @@ Cada execução gera `reports/cucumber-report.html` (não versionado) com o resu
 
 - Estrutura modular que facilita manutenção e evolução.
 
--------------------
+---
 
 ### CI/CD
 
-O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`) a cada push/PR para a `main` e diariamente às 06:00 UTC. O relatório HTML é publicado como artifact de cada execução. A `main` é protegida: mudanças precisam passar por Pull Request com o check de testes verde. Cenários que falham são reexecutados automaticamente uma vez (`--retry 1`), para absorver instabilidades pontuais de rede sem mascarar bugs reais de código.
+O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`) a cada push/PR para a `main` e diariamente às 06:00 UTC. Antes dos testes, o CI valida lint (`eslint`) e formatação (`prettier --check`), quebrando o build se algo estiver fora do padrão. O relatório HTML é publicado como artifact de cada execução. A `main` é protegida: mudanças precisam passar por Pull Request com o check de testes verde. Cenários que falham são reexecutados automaticamente uma vez (`--retry 1`), para absorver instabilidades pontuais de rede sem mascarar bugs reais de código.
 
 ### Segurança da pipeline
 
@@ -146,5 +163,3 @@ O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`
 ### Próximos Passos (Melhorias Futuras)
 
 - Captura de vídeos e traces em falhas (hoje já há print de tela).
-- Lint/format automatizado (ESLint + Prettier) no CI.
-

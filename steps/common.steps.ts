@@ -110,10 +110,13 @@ Then('ele deve ver resultados da busca', async () => {
   await productsPage.assertSearchResultsVisible();
 });
 
-When('ele adiciona os produtos {string} e {string} ao carrinho', async (product1: string, product2: string) => {
-  await productsPage.addProductToCart(product1);
-  await productsPage.addProductToCart(product2);
-});
+When(
+  'ele adiciona os produtos {string} e {string} ao carrinho',
+  async (product1: string, product2: string) => {
+    await productsPage.addProductToCart(product1);
+    await productsPage.addProductToCart(product2);
+  }
+);
 
 When('ele adiciona o produto {string} ao carrinho', async (productName: string) => {
   await productsPage.addProductToCart(productName);
@@ -124,10 +127,13 @@ When('ele acessa o carrinho', async () => {
   await cartPage.goto();
 });
 
-Then('ele deve ver os produtos {string} e {string} no carrinho', async (product1: string, product2: string) => {
-  await cartPage.assertProductInCart(product1);
-  await cartPage.assertProductInCart(product2);
-});
+Then(
+  'ele deve ver os produtos {string} e {string} no carrinho',
+  async (product1: string, product2: string) => {
+    await cartPage.assertProductInCart(product1);
+    await cartPage.assertProductInCart(product2);
+  }
+);
 
 When('ele remove o produto {string} do carrinho', async (productName: string) => {
   await cartPage.removeProduct(productName);
@@ -177,9 +183,12 @@ Given('que o usuário está na página inicial', async () => {
   await contactPage.gotoHome();
 });
 
-When('ele envia o formulário de contato com {string}, {string}, {string} e {string}', async (name: string, email: string, subject: string, message: string) => {
-  await contactPage.submitForm(name, email, subject, message);
-});
+When(
+  'ele envia o formulário de contato com {string}, {string}, {string} e {string}',
+  async (name: string, email: string, subject: string, message: string) => {
+    await contactPage.submitForm(name, email, subject, message);
+  }
+);
 
 Then('ele deve ver a confirmação de envio do formulário', async () => {
   await contactPage.assertMessageSent();

@@ -20,7 +20,9 @@ export class CheckoutPage {
   }
 
   async assertLoginRequiredMessage() {
-    await expect(this.page.getByText('Register / Login account to proceed on checkout.')).toBeVisible();
+    await expect(
+      this.page.getByText('Register / Login account to proceed on checkout.')
+    ).toBeVisible();
   }
 
   async placeOrder() {

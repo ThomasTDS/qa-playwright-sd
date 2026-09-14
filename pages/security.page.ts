@@ -24,7 +24,10 @@ export class SecurityPage {
 
   async assertPasswordFieldIsMasked() {
     await this.page.goto(BASE_URL + 'login');
-    await expect(this.page.locator('[data-qa="login-password"]')).toHaveAttribute('type', 'password');
+    await expect(this.page.locator('[data-qa="login-password"]')).toHaveAttribute(
+      'type',
+      'password'
+    );
   }
 
   async assertSessionCookieIsHttpOnly() {
