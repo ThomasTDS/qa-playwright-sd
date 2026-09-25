@@ -28,6 +28,7 @@ export class LoginPage {
       );
     }
     await this.login(email, password);
+    await this.assertLoggedIn();
   }
 
   async assertLoggedIn() {

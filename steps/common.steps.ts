@@ -1,5 +1,5 @@
 import { Given, When, Then, Before, After, Status, setDefaultTimeout } from '@cucumber/cucumber';
-import { chromium, Browser, Page } from 'playwright';
+import { chromium, firefox, webkit, Browser, BrowserType, Page } from 'playwright';
 import { LoginPage } from '../pages/login.page';
 import { RegisterPage } from '../pages/register.page';
 import { ProductsPage } from '../pages/products.page';
@@ -9,6 +9,19 @@ import { ContactPage } from '../pages/contact.page';
 import { SecurityPage } from '../pages/security.page';
 
 setDefaultTimeout(30000);
+
+const SUPPORTED_BROWSERS: Record<string, BrowserType> = { chromium, firefox, webkit };
+
+function resolveBrowserType(): BrowserType {
+  const browserName = process.env.BROWSER ?? 'chromium';
+  const browserType = SUPPORTED_BROWSERS[browserName];
+  if (!browserType) {
+    throw new Error(
+      `BROWSER inválido: "${browserName}". Use um de ${Object.keys(SUPPORTED_BROWSERS).join(', ')}.`
+    );
+  }
+  return browserType;
+}
 
 let browser: Browser;
 let page: Page;
@@ -22,7 +35,7 @@ let securityPage: SecurityPage;
 
 // Hooks
 Before(async () => {
-  browser = await chromium.launch({ headless: process.env.HEADLESS === 'true' });
+  browser = await resolveBrowserType().launch({ headless: process.env.HEADLESS === 'true' });
   page = await browser.newPage();
   loginPage = new LoginPage(page);
   registerPage = new RegisterPage(page);

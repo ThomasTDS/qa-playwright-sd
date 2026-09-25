@@ -28,16 +28,43 @@ jobs:
 
       - run: npm run typecheck
 
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium firefox webkit
 
-      - run: npm test -- --retry 1
+      - name: Testes (Chromium)
+        run: npm test -- --retry 1
         env:
           HEADLESS: 'true'
+          BROWSER: chromium
           TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
           TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+      - name: Guarda relatorio (Chromium)
+        if: always()
+        run: mv reports/cucumber-report.html reports/cucumber-report-chromium.html
+
+      - name: Testes (Firefox)
+        run: npm test -- --retry 1
+        env:
+          HEADLESS: 'true'
+          BROWSER: firefox
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+      - name: Guarda relatorio (Firefox)
+        if: always()
+        run: mv reports/cucumber-report.html reports/cucumber-report-firefox.html
+
+      - name: Testes (WebKit)
+        run: npm test -- --retry 1
+        env:
+          HEADLESS: 'true'
+          BROWSER: webkit
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+      - name: Guarda relatorio (WebKit)
+        if: always()
+        run: mv reports/cucumber-report.html reports/cucumber-report-webkit.html
 
       - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: cucumber-report
-          path: reports/cucumber-report.html
+          path: reports/cucumber-report-*.html
