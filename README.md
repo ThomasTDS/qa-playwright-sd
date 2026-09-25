@@ -33,6 +33,7 @@ qa-playwright-sd/
 ├── .env.example           # Modelo de variáveis de ambiente
 ├── package.json           # Dependências e scripts NPM
 ├── tsconfig.json          # Configuração do TypeScript
+├── Dockerfile             # Imagem para rodar os testes containerizados
 ├── LICENSE                # Licença MIT
 ├── SECURITY.md            # Política de divulgação de vulnerabilidades
 └── README.md              # Este arquivo
@@ -139,6 +140,22 @@ TEST_USER_PASSWORD=
 ```
 
 No CI, essas mesmas variáveis vêm de GitHub Secrets (`TEST_USER_EMAIL`/`TEST_USER_PASSWORD`), configurados no repositório.
+
+### Rodar com Docker
+
+O `Dockerfile` usa a imagem oficial do Playwright (já com Chromium, Firefox e WebKit instalados), então não é preciso instalar navegadores localmente.
+
+```bash
+docker build -t qa-playwright-sd .
+
+docker run --rm --env-file .env -v "$(pwd)/reports:/app/reports" qa-playwright-sd
+```
+
+O `--env-file .env` repassa as credenciais de teste para o container, e o volume em `reports/` traz o relatório HTML gerado de volta para a máquina host. Para rodar em outro navegador ou só o smoke, passe a variável ou o comando por cima do `CMD` padrão, por exemplo:
+
+```bash
+docker run --rm --env-file .env -e BROWSER=firefox -v "$(pwd)/reports:/app/reports" qa-playwright-sd
+```
 
 ### Relatório HTML
 
