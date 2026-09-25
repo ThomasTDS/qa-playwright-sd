@@ -99,6 +99,8 @@ npm run format:check  # só verifica, sem alterar (usado no CI)
 npm run typecheck     # verifica erros de tipos do TypeScript (sem gerar arquivos)
 ```
 
+Um hook de **pre-commit** (via [Husky](https://typicode.github.io/husky/) + [lint-staged](https://github.com/lint-staged/lint-staged)) roda automaticamente a cada `git commit`, aplicando ESLint e Prettier só nos arquivos que estão staged — assim problemas de lint/formatação são pegos antes mesmo de chegar ao CI. O hook é instalado automaticamente pelo `npm install` (script `prepare`).
+
 ### Rodar em outro navegador
 
 Por padrão os testes rodam no Chromium. Para rodar em outro navegador, defina `BROWSER` (`chromium`, `firefox` ou `webkit`):
