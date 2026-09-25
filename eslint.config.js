@@ -1,6 +1,7 @@
 const js = require('@eslint/js');
 const tseslint = require('typescript-eslint');
 const eslintConfigPrettier = require('eslint-config-prettier');
+const eslintPluginPlaywright = require('eslint-plugin-playwright');
 const globals = require('globals');
 
 module.exports = tseslint.config(
@@ -23,6 +24,14 @@ module.exports = tseslint.config(
     files: ['**/*.js'],
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
+  {
+    files: ['pages/**/*.ts', 'steps/**/*.ts'],
+    ...eslintPluginPlaywright.configs['flat/recommended'],
+    rules: {
+      ...eslintPluginPlaywright.configs['flat/recommended'].rules,
+      'playwright/no-wait-for-timeout': 'error',
     },
   },
   eslintConfigPrettier
