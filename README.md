@@ -177,7 +177,7 @@ Cada execução gera `reports/cucumber-report.html` (não versionado) com o resu
 
 ### CI/CD
 
-O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`) a cada push/PR para a `main` e diariamente às 06:00 UTC. Antes dos testes, o CI valida lint (`eslint`), formatação (`prettier --check`) e tipos (`tsc --noEmit`), quebrando o build se algo estiver fora do padrão. O relatório HTML é publicado como artifact de cada execução. A `main` é protegida: mudanças precisam passar por Pull Request com o check de testes verde. Cenários que falham são reexecutados automaticamente uma vez (`--retry 1`), para absorver instabilidades pontuais de rede sem mascarar bugs reais de código.
+O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`) a cada push/PR para a `main` e diariamente às 06:00 UTC. Antes dos testes, o CI valida lint (`eslint`), formatação (`prettier --check`) e tipos (`tsc --noEmit`), quebrando o build se algo estiver fora do padrão. Os cenários rodam em paralelo (`parallel: 4` no `cucumber.js` — cada worker abre seu próprio navegador/contexto isolado, sem estado compartilhado entre eles), reduzindo bastante o tempo total de execução. O relatório HTML é publicado como artifact de cada execução. A `main` é protegida: mudanças precisam passar por Pull Request com o check de testes verde. Cenários que falham são reexecutados automaticamente uma vez (`--retry 1`), para absorver instabilidades pontuais de rede sem mascarar bugs reais de código.
 
 ### Segurança da pipeline
 
