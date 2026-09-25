@@ -98,6 +98,20 @@ npm run format:check  # só verifica, sem alterar (usado no CI)
 npm run typecheck     # verifica erros de tipos do TypeScript (sem gerar arquivos)
 ```
 
+### Rodar em outro navegador
+
+Por padrão os testes rodam no Chromium. Para rodar em outro navegador, defina `BROWSER` (`chromium`, `firefox` ou `webkit`):
+
+```
+# PowerShell
+$env:BROWSER="firefox"; npm test
+
+# bash
+BROWSER=firefox npm test
+```
+
+O CI roda a suíte completa nos três navegadores a cada execução.
+
 ### Rodar contra outra URL
 
 Por padrão os testes apontam para `https://automationexercise.com/`. Para rodar contra outro ambiente, defina `BASE_URL`:
