@@ -34,6 +34,7 @@ qa-playwright-sd/
 ├── package.json           # Dependências e scripts NPM
 ├── tsconfig.json          # Configuração do TypeScript
 ├── LICENSE                # Licença MIT
+├── SECURITY.md            # Política de divulgação de vulnerabilidades
 └── README.md              # Este arquivo
 
 ```
@@ -183,6 +184,7 @@ O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`
 
 - `npm audit --audit-level=high` roda no CI a cada execução, quebrando o build se houver vulnerabilidade alta/crítica em dependências.
 - **Dependabot** ativo (`.github/dependabot.yml`): atualizações automáticas semanais de dependências npm e das actions do workflow, além de alertas de segurança nativos do GitHub.
+- Política de divulgação de vulnerabilidades em [SECURITY.md](SECURITY.md).
 
 ### Próximos Passos (Melhorias Futuras)
 
