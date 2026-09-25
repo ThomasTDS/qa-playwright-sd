@@ -1,5 +1,7 @@
 import { Given, When, Then, Before, After, Status, setDefaultTimeout } from '@cucumber/cucumber';
-import { chromium, firefox, webkit, Browser, BrowserType, Page } from 'playwright';
+import { chromium, firefox, webkit, Browser, BrowserContext, BrowserType, Page } from 'playwright';
+import * as fs from 'fs';
+import * as path from 'path';
 import { LoginPage } from '../pages/login.page';
 import { RegisterPage } from '../pages/register.page';
 import { ProductsPage } from '../pages/products.page';
@@ -25,7 +27,10 @@ function resolveBrowserType(): BrowserType {
   return browserType;
 }
 
+const TRACES_DIR = 'traces';
+
 let browser: Browser;
+let context: BrowserContext;
 let page: Page;
 let loginPage: LoginPage;
 let registerPage: RegisterPage;
@@ -40,7 +45,8 @@ let apiPage: ApiPage;
 // Hooks
 Before(async () => {
   browser = await resolveBrowserType().launch({ headless: process.env.HEADLESS === 'true' });
-  const context = await browser.newContext();
+  context = await browser.newContext();
+  await context.tracing.start({ screenshots: true, snapshots: true, sources: true });
   page = await context.newPage();
   loginPage = new LoginPage(page);
   registerPage = new RegisterPage(page);
@@ -57,6 +63,18 @@ After(async function (scenario) {
   if (scenario.result?.status === Status.FAILED) {
     const screenshot = await page.screenshot();
     await this.attach(screenshot, 'image/png');
+
+    fs.mkdirSync(TRACES_DIR, { recursive: true });
+    const browserName = process.env.BROWSER ?? 'chromium';
+    const safeName = (scenario.pickle.name || 'cenario').replace(/[^a-zA-Z0-9-_]+/g, '-');
+    const tracePath = path.join(TRACES_DIR, `${safeName}-${browserName}-${Date.now()}.zip`);
+    await context.tracing.stop({ path: tracePath });
+    await this.attach(
+      `Trace salvo em ${tracePath} (abrir com "npx playwright show-trace <arquivo>")`,
+      'text/plain'
+    );
+  } else {
+    await context.tracing.stop();
   }
   await browser.close();
 });

@@ -68,3 +68,10 @@ jobs:
         with:
           name: cucumber-report
           path: reports/cucumber-report-*.html
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: playwright-traces
+          path: traces/*.zip
+          if-no-files-found: ignore
