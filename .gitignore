@@ -27,5 +27,8 @@ reports/
 # VS Code
 .vscode/
 
+# Husky internals
+.husky/_
+
 NOTAS-DEV.md
 DECISOES-PROJETO.md
