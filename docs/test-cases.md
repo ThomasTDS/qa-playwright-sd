@@ -23,6 +23,10 @@ Um cenário com `Scenario Outline`/`Examples` (parametrizado) conta como **um ú
 | TC-015 | Segurança      | Cookie de sessão deve ter a flag HttpOnly ativada                                | Funcional | Alta       | Automatizado | `features/security.feature`      |
 | TC-016 | Acessibilidade | Página de login sem violações críticas de acessibilidade (axe-core)              | Funcional | Média      | Automatizado | `features/accessibility.feature` |
 | TC-017 | Acessibilidade | Página de produtos sem violações críticas de acessibilidade (axe-core)           | Funcional | Média      | Automatizado | `features/accessibility.feature` |
+| TC-018 | API            | Lista de produtos via API contém um produto conhecido                            | Funcional | Média      | Automatizado | `features/api.feature`           |
+| TC-019 | API            | Lista de marcas via API não está vazia                                           | Funcional | Baixa      | Automatizado | `features/api.feature`           |
+| TC-020 | API            | Busca de produtos via API retorna resultados esperados                           | Funcional | Média      | Automatizado | `features/api.feature`           |
+| TC-021 | API            | API de produtos rejeita método HTTP não suportado                                | Negativo  | Baixa      | Automatizado | `features/api.feature`           |
 
 ## Smoke
 

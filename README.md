@@ -155,6 +155,8 @@ Cada execução gera `reports/cucumber-report.html` (não versionado) com o resu
 
 - Acessibilidade (passivo, com [axe-core](https://github.com/dequelabs/axe-core-npm)): verifica violações `critical`/`serious` nas páginas de login e produtos. Como a aplicação sob teste é de terceiros, o cenário não quebra o build — as violações encontradas são anexadas ao relatório HTML para documentação, no mesmo espírito da suíte de segurança.
 
+- Verificação de API: chama diretamente a API pública do automationexercise.com (`/api/productsList`, `/api/brandsList`, `/api/searchProduct`), sem passar pela interface, validando estrutura da resposta, presença de dados esperados e rejeição de método HTTP não suportado.
+
 ---
 
 ### Documentação de QA
