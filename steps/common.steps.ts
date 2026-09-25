@@ -7,6 +7,7 @@ import { CartPage } from '../pages/cart.page';
 import { CheckoutPage } from '../pages/checkout.page';
 import { ContactPage } from '../pages/contact.page';
 import { SecurityPage } from '../pages/security.page';
+import { AccessibilityPage } from '../pages/accessibility.page';
 
 setDefaultTimeout(30000);
 
@@ -32,11 +33,13 @@ let cartPage: CartPage;
 let checkoutPage: CheckoutPage;
 let contactPage: ContactPage;
 let securityPage: SecurityPage;
+let accessibilityPage: AccessibilityPage;
 
 // Hooks
 Before(async () => {
   browser = await resolveBrowserType().launch({ headless: process.env.HEADLESS === 'true' });
-  page = await browser.newPage();
+  const context = await browser.newContext();
+  page = await context.newPage();
   loginPage = new LoginPage(page);
   registerPage = new RegisterPage(page);
   productsPage = new ProductsPage(page);
@@ -44,6 +47,7 @@ Before(async () => {
   checkoutPage = new CheckoutPage(page);
   contactPage = new ContactPage(page);
   securityPage = new SecurityPage(page);
+  accessibilityPage = new AccessibilityPage(page);
 });
 
 After(async function (scenario) {
@@ -230,4 +234,18 @@ Then('o campo de senha deve ser do tipo password', async () => {
 
 Then('o cookie de sessão deve ter a flag HttpOnly ativada', async () => {
   await securityPage.assertSessionCookieIsHttpOnly();
+});
+
+// ACCESSIBILITY STEPS
+Then('a página não deve ter violações críticas de acessibilidade', async function () {
+  const violations = await accessibilityPage.findCriticalOrSeriousViolations();
+  if (violations.length > 0) {
+    const details = violations
+      .map((v) => `- [${v.impact}] ${v.id}: ${v.description} (${v.elementCount} elemento(s))`)
+      .join('\n');
+    await this.attach(
+      `Violações de acessibilidade observadas na aplicação sob teste (QA passivo, não bloqueia o teste):\n${details}`,
+      'text/plain'
+    );
+  }
 });

@@ -20,6 +20,7 @@
     "node": ">=22"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@cucumber/cucumber": "^13.2.1",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.63.0",

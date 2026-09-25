@@ -4,23 +4,25 @@ Rastreabilidade dos casos de teste do projeto. Não duplica os passos dos cenár
 
 Um cenário com `Scenario Outline`/`Examples` (parametrizado) conta como **um único** test case, não um por variação de dados.
 
-| ID     | Módulo     | Título                                                                           | Tipo      | Prioridade | Automação    | Cenário                     |
-| ------ | ---------- | -------------------------------------------------------------------------------- | --------- | ---------- | ------------ | --------------------------- |
-| TC-001 | Login      | Login com credenciais válidas                                                    | Funcional | Crítica    | Automatizado | `features/login.feature`    |
-| TC-002 | Login      | Login com credenciais inválidas                                                  | Negativo  | Alta       | Automatizado | `features/login.feature`    |
-| TC-003 | Cadastro   | Cadastro de um novo usuário (com exclusão ao final)                              | Funcional | Alta       | Automatizado | `features/login.feature`    |
-| TC-004 | Produtos   | Buscar produtos e visualizar resultados                                          | Funcional | Média      | Automatizado | `features/products.feature` |
-| TC-005 | Carrinho   | Adicionar múltiplos produtos ao carrinho                                         | Funcional | Alta       | Automatizado | `features/products.feature` |
-| TC-006 | Carrinho   | Remover um produto do carrinho                                                   | Funcional | Média      | Automatizado | `features/products.feature` |
-| TC-007 | Checkout   | Finalizar compra com sucesso (login → carrinho → pagamento)                      | Funcional | Crítica    | Automatizado | `features/checkout.feature` |
-| TC-008 | Checkout   | Tentar finalizar checkout sem estar logado                                       | Negativo  | Alta       | Automatizado | `features/checkout.feature` |
-| TC-009 | Contato    | Enviar formulário de contato com sucesso                                         | Funcional | Média      | Automatizado | `features/contact.feature`  |
-| TC-010 | Newsletter | Inscrever e-mail na newsletter com sucesso                                       | Funcional | Baixa      | Automatizado | `features/contact.feature`  |
-| TC-011 | Sessão     | Logout                                                                           | Funcional | Média      | Automatizado | `features/login.feature`    |
-| TC-012 | Segurança  | Cabeçalhos de segurança HTTP presentes (X-Frame-Options, X-Content-Type-Options) | Funcional | Alta       | Automatizado | `features/security.feature` |
-| TC-013 | Segurança  | Redirecionamento HTTP para HTTPS                                                 | Funcional | Alta       | Automatizado | `features/security.feature` |
-| TC-014 | Segurança  | Campo de senha deve estar mascarado                                              | Funcional | Média      | Automatizado | `features/security.feature` |
-| TC-015 | Segurança  | Cookie de sessão deve ter a flag HttpOnly ativada                                | Funcional | Alta       | Automatizado | `features/security.feature` |
+| ID     | Módulo         | Título                                                                           | Tipo      | Prioridade | Automação    | Cenário                          |
+| ------ | -------------- | -------------------------------------------------------------------------------- | --------- | ---------- | ------------ | -------------------------------- |
+| TC-001 | Login          | Login com credenciais válidas                                                    | Funcional | Crítica    | Automatizado | `features/login.feature`         |
+| TC-002 | Login          | Login com credenciais inválidas                                                  | Negativo  | Alta       | Automatizado | `features/login.feature`         |
+| TC-003 | Cadastro       | Cadastro de um novo usuário (com exclusão ao final)                              | Funcional | Alta       | Automatizado | `features/login.feature`         |
+| TC-004 | Produtos       | Buscar produtos e visualizar resultados                                          | Funcional | Média      | Automatizado | `features/products.feature`      |
+| TC-005 | Carrinho       | Adicionar múltiplos produtos ao carrinho                                         | Funcional | Alta       | Automatizado | `features/products.feature`      |
+| TC-006 | Carrinho       | Remover um produto do carrinho                                                   | Funcional | Média      | Automatizado | `features/products.feature`      |
+| TC-007 | Checkout       | Finalizar compra com sucesso (login → carrinho → pagamento)                      | Funcional | Crítica    | Automatizado | `features/checkout.feature`      |
+| TC-008 | Checkout       | Tentar finalizar checkout sem estar logado                                       | Negativo  | Alta       | Automatizado | `features/checkout.feature`      |
+| TC-009 | Contato        | Enviar formulário de contato com sucesso                                         | Funcional | Média      | Automatizado | `features/contact.feature`       |
+| TC-010 | Newsletter     | Inscrever e-mail na newsletter com sucesso                                       | Funcional | Baixa      | Automatizado | `features/contact.feature`       |
+| TC-011 | Sessão         | Logout                                                                           | Funcional | Média      | Automatizado | `features/login.feature`         |
+| TC-012 | Segurança      | Cabeçalhos de segurança HTTP presentes (X-Frame-Options, X-Content-Type-Options) | Funcional | Alta       | Automatizado | `features/security.feature`      |
+| TC-013 | Segurança      | Redirecionamento HTTP para HTTPS                                                 | Funcional | Alta       | Automatizado | `features/security.feature`      |
+| TC-014 | Segurança      | Campo de senha deve estar mascarado                                              | Funcional | Média      | Automatizado | `features/security.feature`      |
+| TC-015 | Segurança      | Cookie de sessão deve ter a flag HttpOnly ativada                                | Funcional | Alta       | Automatizado | `features/security.feature`      |
+| TC-016 | Acessibilidade | Página de login sem violações críticas de acessibilidade (axe-core)              | Funcional | Média      | Automatizado | `features/accessibility.feature` |
+| TC-017 | Acessibilidade | Página de produtos sem violações críticas de acessibilidade (axe-core)           | Funcional | Média      | Automatizado | `features/accessibility.feature` |
 
 ## Smoke
 
