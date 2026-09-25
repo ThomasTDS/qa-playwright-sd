@@ -153,6 +153,8 @@ Cada execução gera `reports/cucumber-report.html` (não versionado) com o resu
 
 - QA de Segurança (passivo/defensivo): cabeçalhos de segurança HTTP, redirecionamento forçado para HTTPS, mascaramento de campo de senha e flag `HttpOnly` do cookie de sessão. Sem tentativas de exploração ativa contra a aplicação de terceiros — só observação do que ela já expõe publicamente.
 
+- Acessibilidade (passivo, com [axe-core](https://github.com/dequelabs/axe-core-npm)): verifica violações `critical`/`serious` nas páginas de login e produtos. Como a aplicação sob teste é de terceiros, o cenário não quebra o build — as violações encontradas são anexadas ao relatório HTML para documentação, no mesmo espírito da suíte de segurança.
+
 ---
 
 ### Documentação de QA
