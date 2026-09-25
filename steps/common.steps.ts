@@ -8,6 +8,7 @@ import { CheckoutPage } from '../pages/checkout.page';
 import { ContactPage } from '../pages/contact.page';
 import { SecurityPage } from '../pages/security.page';
 import { AccessibilityPage } from '../pages/accessibility.page';
+import { ApiPage } from '../pages/api.page';
 
 setDefaultTimeout(30000);
 
@@ -34,6 +35,7 @@ let checkoutPage: CheckoutPage;
 let contactPage: ContactPage;
 let securityPage: SecurityPage;
 let accessibilityPage: AccessibilityPage;
+let apiPage: ApiPage;
 
 // Hooks
 Before(async () => {
@@ -48,6 +50,7 @@ Before(async () => {
   contactPage = new ContactPage(page);
   securityPage = new SecurityPage(page);
   accessibilityPage = new AccessibilityPage(page);
+  apiPage = new ApiPage(page);
 });
 
 After(async function (scenario) {
@@ -248,4 +251,24 @@ Then('a página não deve ter violações críticas de acessibilidade', async fu
       'text/plain'
     );
   }
+});
+
+// API STEPS
+Then('a API de produtos deve conter o produto {string}', async (productName: string) => {
+  await apiPage.assertProductsListContains(productName);
+});
+
+Then('a API de marcas não deve estar vazia', async () => {
+  await apiPage.assertBrandsListNotEmpty();
+});
+
+Then(
+  'a busca via API por {string} deve retornar o produto {string}',
+  async (term: string, productName: string) => {
+    await apiPage.assertSearchResultsContain(term, productName);
+  }
+);
+
+Then('a API de produtos deve rejeitar POST com o código 405', async () => {
+  await apiPage.assertProductsListRejectsPost();
 });
