@@ -16,6 +16,10 @@ traces/
 # Cucumber reports
 reports/
 
+# Allure reports
+allure-results/
+allure-report/
+
 # Environment files
 .env
 .env.local

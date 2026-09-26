@@ -63,11 +63,22 @@ jobs:
         if: always()
         run: mv reports/cucumber-report.html reports/cucumber-report-webkit.html
 
+      - name: Gera relatorio Allure
+        if: always()
+        run: npm run allure:generate
+
       - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: cucumber-report
           path: reports/cucumber-report-*.html
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: allure-report
+          path: allure-report/
+          if-no-files-found: ignore
 
       - uses: actions/upload-artifact@v7
         if: always()
