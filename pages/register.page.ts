@@ -27,6 +27,14 @@ export class RegisterPage {
     await expect(this.page.getByText('Enter Account Information')).toBeVisible();
   }
 
+  // Como startSignup(), mas sem assumir sucesso: usado no fluxo negativo em que o
+  // cadastro é rejeitado (ex.: e-mail ja existente) e a proxima tela nao aparece.
+  async attemptSignup(name: string, email: string) {
+    await this.page.locator('[data-qa="signup-name"]').fill(name);
+    await this.page.locator('[data-qa="signup-email"]').fill(email);
+    await this.page.locator('[data-qa="signup-button"]').click();
+  }
+
   async fillAccountInformation(info: AccountInfo) {
     await this.page.locator('#id_gender1').check();
     await this.page.locator('[data-qa="password"]').fill(info.password);

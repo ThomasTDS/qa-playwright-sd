@@ -28,4 +28,8 @@ export class CartPage {
       .locator('.cart_quantity_delete')
       .click();
   }
+
+  async assertCartIsEmpty() {
+    await expect(this.page.getByText('Cart is empty!')).toBeVisible();
+  }
 }

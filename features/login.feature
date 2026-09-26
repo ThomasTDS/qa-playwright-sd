@@ -25,3 +25,10 @@ Feature: Login e cadastro no Automation Exercise
     When ele faz login com a conta de teste
     And ele faz logout
     Then ele deve ver que está deslogado
+
+  @TC-022
+  Scenario: Cadastro com e-mail já existente
+    Given que o usuário está na página de login
+    And que já existe uma conta cadastrada com um e-mail conhecido
+    When ele tenta se cadastrar novamente com esse mesmo e-mail
+    Then ele deve ver a mensagem "Email Address already exist!"

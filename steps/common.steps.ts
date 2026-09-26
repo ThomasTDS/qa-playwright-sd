@@ -42,6 +42,7 @@ let contactPage: ContactPage;
 let securityPage: SecurityPage;
 let accessibilityPage: AccessibilityPage;
 let apiPage: ApiPage;
+let pendingAccountCleanupEmail: string | undefined;
 
 // Hooks
 Before(async () => {
@@ -61,6 +62,11 @@ Before(async () => {
 });
 
 After(async function (scenario) {
+  if (pendingAccountCleanupEmail) {
+    await apiPage.deleteAccount(pendingAccountCleanupEmail);
+    pendingAccountCleanupEmail = undefined;
+  }
+
   if (scenario.result?.status === Status.FAILED) {
     const screenshot = await page.screenshot();
     await this.attach(screenshot, 'image/png');
@@ -141,6 +147,19 @@ Then('a conta criada deve poder ser removida', async () => {
   await registerPage.deleteAccount();
 });
 
+Given('que já existe uma conta cadastrada com um e-mail conhecido', async () => {
+  const email = fakerPT_BR.internet.email({ provider: 'mailinator.com' }).toLowerCase();
+  await apiPage.createAccount(email);
+  pendingAccountCleanupEmail = email;
+});
+
+When('ele tenta se cadastrar novamente com esse mesmo e-mail', async () => {
+  if (!pendingAccountCleanupEmail) {
+    throw new Error('Nenhum e-mail preparado pelo step anterior de conta já existente.');
+  }
+  await registerPage.attemptSignup(fakerPT_BR.person.fullName(), pendingAccountCleanupEmail);
+});
+
 // PRODUCTS STEPS
 Given('que o usuário está na página de produtos', async () => {
   await productsPage.goto();
@@ -189,6 +208,14 @@ Then('ele não deve ver o produto {string} no carrinho', async (productName: str
 
 Then('ele deve ver o produto {string} no carrinho', async (productName: string) => {
   await cartPage.assertProductInCart(productName);
+});
+
+When('ele acessa o carrinho sem ter adicionado produtos', async () => {
+  await cartPage.goto();
+});
+
+Then('ele deve ver a mensagem de carrinho vazio', async () => {
+  await cartPage.assertCartIsEmpty();
 });
 
 // CHECKOUT STEPS
@@ -295,4 +322,26 @@ Then(
 
 Then('a API de produtos deve rejeitar POST com o código 405', async () => {
   await apiPage.assertProductsListRejectsPost();
+});
+
+Then(
+  'a verificação de login via API com a conta de teste deve confirmar que o usuário existe',
+  async () => {
+    await apiPage.assertVerifyLoginSucceedsForTestUser();
+  }
+);
+
+Then(
+  'a verificação de login via API com o e-mail {string} e a senha {string} deve indicar que o usuário não foi encontrado',
+  async (email: string, password: string) => {
+    await apiPage.assertVerifyLoginFails(email, password);
+  }
+);
+
+Then('a API deve permitir criar e remover uma conta', async () => {
+  await apiPage.assertCreateAndDeleteAccountRoundTrip();
+});
+
+Then('a consulta de detalhes do usuário de teste via API deve retornar o seu perfil', async () => {
+  await apiPage.assertUserDetailByEmailForTestUser();
 });

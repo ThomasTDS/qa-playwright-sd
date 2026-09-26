@@ -29,6 +29,12 @@ Para a regra de negócio e a história de usuário por trás de cada test case, 
 | TC-019 | API            | Lista de marcas via API não está vazia                                           | Funcional | Baixa      | Automatizado | `features/api.feature`           |
 | TC-020 | API            | Busca de produtos via API retorna resultados esperados                           | Funcional | Média      | Automatizado | `features/api.feature`           |
 | TC-021 | API            | API de produtos rejeita método HTTP não suportado                                | Negativo  | Baixa      | Automatizado | `features/api.feature`           |
+| TC-022 | Cadastro       | Cadastro com e-mail já existente                                                 | Negativo  | Alta       | Automatizado | `features/login.feature`         |
+| TC-023 | Carrinho       | Mensagem de carrinho vazio                                                       | Funcional | Baixa      | Automatizado | `features/products.feature`      |
+| TC-024 | API            | Verificação de login via API com credenciais válidas                             | Funcional | Média      | Automatizado | `features/api.feature`           |
+| TC-025 | API            | Verificação de login via API com credenciais inválidas                           | Negativo  | Média      | Automatizado | `features/api.feature`           |
+| TC-026 | API            | Criação e remoção de conta via API                                               | Funcional | Média      | Automatizado | `features/api.feature`           |
+| TC-027 | API            | Consulta de detalhes do usuário via API                                          | Funcional | Baixa      | Automatizado | `features/api.feature`           |
 
 ## Smoke
 
