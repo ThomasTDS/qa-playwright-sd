@@ -29,6 +29,7 @@ qa-playwright-sd/
 ├── steps/                 # Implementação dos steps do Cucumber
 ├── pages/                 # Page Objects (LoginPage, RegisterPage, ...)
 ├── reports/               # Relatório HTML gerado a cada execução (não versionado)
+├── allure-results/        # Dados brutos do Allure Report (não versionado)
 ├── cucumber.js            # Configuração do Cucumber
 ├── eslint.config.js       # Configuração do ESLint
 ├── .prettierrc.json       # Configuração do Prettier
@@ -163,6 +164,19 @@ docker run --rm --env-file .env -e BROWSER=firefox -v "$(pwd)/reports:/app/repor
 
 Cada execução gera `reports/cucumber-report.html` (não versionado) com o resultado dos cenários. Testes que falham têm automaticamente um print da tela no momento da falha anexado ao relatório, além de um [trace do Playwright](https://playwright.dev/docs/trace-viewer) (`traces/*.zip`, não versionado) com a timeline completa da execução, DOM snapshots e código-fonte da ação que falhou. Para abrir um trace: `npx playwright show-trace traces/<arquivo>.zip`.
 
+### Relatório Allure
+
+Além do HTML do Cucumber, cada execução também gera dados brutos para o [Allure Report](https://allurereport.org/) em `allure-results/` (não versionado). Para visualizar:
+
+```bash
+npm run allure:generate   # gera allure-report/ a partir de allure-results/
+npm run allure:open       # abre o relatório gerado no navegador
+```
+
+O Allure agrupa os cenários por feature/severidade, mostra histórico de execuções e é mais navegável que o HTML simples do Cucumber para investigar uma suíte grande.
+
+> **Nota de configuração:** o formatter `allure-cucumberjs/reporter` não convive com os formatters de terminal `progress`/`summary` do Cucumber — ao combinar qualquer um deles, os arquivos de `allure-results/` simplesmente deixam de ser gerados, sem erro visível (parece bug de integração entre as duas libs). Por isso o `cucumber.js` usa só `allure-cucumberjs/reporter` + `html`, sem formatter de progresso no terminal — o trade-off é não ver mais o resumo `"N scenarios (N passed)"` direto no terminal/log do CI, só nos relatórios gerados.
+
 ---
 
 ### Estrutura de Testes e Padrões Aplicados
@@ -203,7 +217,7 @@ Cada execução gera `reports/cucumber-report.html` (não versionado) com o resu
 
 ### CI/CD
 
-O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`) a cada push/PR para a `main` e diariamente às 06:00 UTC. Antes dos testes, o CI valida lint (`eslint`), formatação (`prettier --check`) e tipos (`tsc --noEmit`), quebrando o build se algo estiver fora do padrão. Os cenários rodam em paralelo (`parallel: 4` no `cucumber.js` — cada worker abre seu próprio navegador/contexto isolado, sem estado compartilhado entre eles), reduzindo bastante o tempo total de execução. O relatório HTML e os traces de falhas são publicados como artifacts de cada execução. A `main` é protegida: mudanças precisam passar por Pull Request com o check de testes verde. Cenários que falham são reexecutados automaticamente uma vez (`--retry 1`), para absorver instabilidades pontuais de rede sem mascarar bugs reais de código.
+O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`) a cada push/PR para a `main` e diariamente às 06:00 UTC. Antes dos testes, o CI valida lint (`eslint`), formatação (`prettier --check`) e tipos (`tsc --noEmit`), quebrando o build se algo estiver fora do padrão. Os cenários rodam em paralelo (`parallel: 4` no `cucumber.js` — cada worker abre seu próprio navegador/contexto isolado, sem estado compartilhado entre eles), reduzindo bastante o tempo total de execução. O relatório HTML, o relatório Allure e os traces de falhas são publicados como artifacts de cada execução. A `main` é protegida: mudanças precisam passar por Pull Request com o check de testes verde. Cenários que falham são reexecutados automaticamente uma vez (`--retry 1`), para absorver instabilidades pontuais de rede sem mascarar bugs reais de código.
 
 ### Segurança da pipeline
 

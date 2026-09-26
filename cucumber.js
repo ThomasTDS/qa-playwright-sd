@@ -5,7 +5,10 @@ module.exports = {
     require: ['steps/**/*.ts'],
     paths: ['features/**/*.feature'],
     requireModule: ['ts-node/register'],
-    format: ['progress', 'html:reports/cucumber-report.html'],
+    // 'progress' e 'summary' nao convivem com allure-cucumberjs/reporter (em
+    // qualquer ordem): os testes rodam normalmente, mas os arquivos em
+    // allure-results/ simplesmente nao sao escritos. 'html' nao tem esse problema.
+    format: ['allure-cucumberjs/reporter', 'html:reports/cucumber-report.html'],
     parallel: 4,
   },
 };

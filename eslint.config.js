@@ -6,7 +6,15 @@ const globals = require('globals');
 
 module.exports = tseslint.config(
   {
-    ignores: ['node_modules', 'dist', 'reports', 'build'],
+    ignores: [
+      'node_modules',
+      'dist',
+      'reports',
+      'build',
+      'allure-report',
+      'allure-results',
+      'traces',
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
