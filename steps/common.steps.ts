@@ -1,5 +1,6 @@
 import { Given, When, Then, Before, After, Status, setDefaultTimeout } from '@cucumber/cucumber';
 import { chromium, firefox, webkit, Browser, BrowserContext, BrowserType, Page } from 'playwright';
+import { fakerPT_BR } from '@faker-js/faker';
 import * as fs from 'fs';
 import * as path from 'path';
 import { LoginPage } from '../pages/login.page';
@@ -110,18 +111,23 @@ Then('ele deve ver que está deslogado', async () => {
 
 // REGISTRATION STEPS
 When('ele se cadastra com um e-mail novo', async () => {
-  const uniqueEmail = `qa-playwright-sd-${Date.now()}@mailinator.com`;
-  await registerPage.startSignup('QA Playwright SD', uniqueEmail);
+  const firstName = fakerPT_BR.person.firstName();
+  const lastName = fakerPT_BR.person.lastName();
+  const email = fakerPT_BR.internet
+    .email({ firstName, lastName, provider: 'mailinator.com' })
+    .toLowerCase();
+
+  await registerPage.startSignup(`${firstName} ${lastName}`, email);
   await registerPage.fillAccountInformation({
-    password: 'SenhaDeTeste123',
-    firstName: 'QA',
-    lastName: 'Playwright',
-    company: 'qa-playwright-sd',
-    address: 'Rua de Teste, 123',
-    state: 'SP',
-    city: 'Sao Paulo',
-    zipcode: '01000-000',
-    mobileNumber: '11999999999',
+    password: fakerPT_BR.internet.password({ length: 12 }),
+    firstName,
+    lastName,
+    company: fakerPT_BR.company.name(),
+    address: fakerPT_BR.location.streetAddress(),
+    state: fakerPT_BR.location.state(),
+    city: fakerPT_BR.location.city(),
+    zipcode: fakerPT_BR.location.zipCode(),
+    mobileNumber: fakerPT_BR.string.numeric(10),
     country: 'Canada',
   });
 });
