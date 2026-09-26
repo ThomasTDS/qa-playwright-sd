@@ -22,7 +22,9 @@ qa-playwright-sd/
 │   ├── workflows/         # Pipeline de CI (GitHub Actions)
 │   ├── ISSUE_TEMPLATE/    # Template de bug report
 │   └── dependabot.yml     # Atualização automática de dependências
-├── docs/                  # Matriz de rastreabilidade de test cases
+├── docs/
+│   ├── criterios-aceite/  # Critérios de aceite por feature (Dado/Quando/Então)
+│   └── test-cases.md      # Matriz de rastreabilidade de test cases
 ├── features/              # Cenários em Gherkin (.feature)
 ├── steps/                 # Implementação dos steps do Cucumber
 ├── pages/                 # Page Objects (LoginPage, RegisterPage, ...)
@@ -186,6 +188,8 @@ Cada execução gera `reports/cucumber-report.html` (não versionado) com o resu
 - Template de bug report em `.github/ISSUE_TEMPLATE/bug_report.md`, com severidade (impacto técnico) e prioridade (urgência de correção) tratadas como campos separados, e causa raiz preenchida só após investigação real.
 
 - Matriz de rastreabilidade em `docs/test-cases.md`, ligando cada test case ao cenário `.feature` correspondente via tag `@TC-XXX`.
+
+- Critérios de aceite em [docs/criterios-aceite/](docs/criterios-aceite/), um arquivo por feature, documentando a história de usuário e as regras de negócio em formato Dado/Quando/Então — o "por quê" de cada cenário, complementando o "onde" da matriz de rastreabilidade.
 
 ---
 
