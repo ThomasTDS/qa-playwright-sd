@@ -4,6 +4,8 @@ Rastreabilidade dos casos de teste do projeto. Não duplica os passos dos cenár
 
 Um cenário com `Scenario Outline`/`Examples` (parametrizado) conta como **um único** test case, não um por variação de dados.
 
+Para a regra de negócio e a história de usuário por trás de cada test case, veja [criterios-aceite/](criterios-aceite/).
+
 | ID     | Módulo         | Título                                                                           | Tipo      | Prioridade | Automação    | Cenário                          |
 | ------ | -------------- | -------------------------------------------------------------------------------- | --------- | ---------- | ------------ | -------------------------------- |
 | TC-001 | Login          | Login com credenciais válidas                                                    | Funcional | Crítica    | Automatizado | `features/login.feature`         |
