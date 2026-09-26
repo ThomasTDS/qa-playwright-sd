@@ -38,6 +38,15 @@ Cenários executáveis: `features/login.feature`.
 
 > Nota de implementação: nome, e-mail, empresa, endereço e telefone são gerados dinamicamente a cada execução com [Faker.js](https://fakerjs.dev/), evitando colisão com contas de execuções anteriores.
 
+### Critério 4 – Cadastro com e-mail já existente (TC-022)
+
+- **Dado** que já existe uma conta cadastrada com um determinado e-mail
+- **Quando** tento me cadastrar novamente usando esse mesmo e-mail
+- **Então** devo ver a mensagem "Email Address already exist!"
+- **E** meu cadastro não deve ser criado
+
+> Nota de implementação: a conta usada para forçar a colisão é criada via API (`POST /api/createAccount`) antes do cenário, e removida via API (`DELETE /api/deleteAccount`) depois — não é a mesma conta de teste usada nos outros cenários de login.
+
 ---
 
 ## História de Usuário — Logout
@@ -46,7 +55,7 @@ Cenários executáveis: `features/login.feature`.
 - **Quero** encerrar minha sessão
 - **Para** garantir que ninguém acesse minha conta pelo mesmo navegador depois de mim
 
-### Critério 4 – Logout (TC-011)
+### Critério 5 – Logout (TC-011)
 
 - **Dado** que estou logado
 - **Quando** clico em logout

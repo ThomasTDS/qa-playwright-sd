@@ -36,3 +36,41 @@ Cenários executáveis: `features/api.feature`.
 - **Dado** que chamo `POST /api/productsList` (endpoint que só aceita GET)
 - **Quando** recebo a resposta
 - **Então** o `responseCode` do corpo deve ser `405`, mesmo com status HTTP de transporte 200
+
+---
+
+## História de Usuário — Conta
+
+- **Como** consumidor da API do Automation Exercise
+- **Quero** validar login e gerenciar contas diretamente pela API
+- **Para** ter uma segunda camada de verificação, independente da interface, sobre o mesmo fluxo de login/cadastro já testado na UI (veja [login.md](login.md))
+
+### Critério 5 – Verificação de login via API com credenciais válidas (TC-024)
+
+- **Dado** que chamo `POST /api/verifyLogin` com o e-mail e a senha da conta de teste
+- **Quando** recebo a resposta
+- **Então** o `responseCode` do corpo deve ser `200`
+- **E** a mensagem deve ser "User exists!"
+
+### Critério 6 – Verificação de login via API com credenciais inválidas (TC-025)
+
+- **Dado** que chamo `POST /api/verifyLogin` com um e-mail e/ou senha que não correspondem a nenhuma conta válida
+- **Quando** recebo a resposta
+- **Então** o `responseCode` do corpo deve ser `404`
+- **E** a mensagem deve ser "User not found!"
+
+> A API responde da mesma forma ("User not found!") tanto para e-mail inexistente quanto para e-mail existente com senha errada — ela não distingue os dois casos na mensagem, o que evita confirmar para quem tenta adivinhar se um e-mail está cadastrado.
+
+### Critério 7 – Criação e remoção de conta via API (TC-026)
+
+- **Dado** que chamo `POST /api/createAccount` com os dados de uma conta nova
+- **Quando** recebo a resposta
+- **Então** o `responseCode` do corpo deve ser `201`
+- **E** ao chamar `DELETE /api/deleteAccount` com o mesmo e-mail em seguida, o `responseCode` deve ser `200`
+
+### Critério 8 – Consulta de detalhes do usuário via API (TC-027)
+
+- **Dado** que chamo `GET /api/getUserDetailByEmail` com o e-mail da conta de teste
+- **Quando** recebo a resposta
+- **Então** o `responseCode` do corpo deve ser `200`
+- **E** o perfil retornado deve corresponder ao e-mail consultado

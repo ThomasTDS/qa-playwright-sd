@@ -21,3 +21,8 @@ Feature: Busca de produtos e carrinho no Automation Exercise
     And ele remove o produto "Blue Top" do carrinho
     Then ele não deve ver o produto "Blue Top" no carrinho
     And ele deve ver o produto "Men Tshirt" no carrinho
+
+  @TC-023
+  Scenario: Mensagem de carrinho vazio
+    When ele acessa o carrinho sem ter adicionado produtos
+    Then ele deve ver a mensagem de carrinho vazio

@@ -27,3 +27,9 @@ Cenários executáveis: `features/products.feature`.
 - **Quando** removo um produto específico
 - **Então** esse produto não deve mais aparecer no carrinho
 - **E** os demais produtos devem continuar lá (a remoção é isolada, não afeta o resto do carrinho)
+
+### Critério 4 – Mensagem de carrinho vazio (TC-023)
+
+- **Dado** que não adicionei nenhum produto ao carrinho
+- **Quando** acesso a página do carrinho
+- **Então** devo ver a mensagem "Cart is empty! Click here to buy products."
