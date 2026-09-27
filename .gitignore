@@ -34,5 +34,4 @@ allure-report/
 # Husky internals
 .husky/_
 
-NOTAS-DEV.md
-DECISOES-PROJETO.md
+Documentos internos/
