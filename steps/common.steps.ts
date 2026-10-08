@@ -1,4 +1,13 @@
-import { Given, When, Then, Before, After, Status, setDefaultTimeout } from '@cucumber/cucumber';
+import {
+  Given,
+  When,
+  Then,
+  Before,
+  After,
+  AfterAll,
+  Status,
+  setDefaultTimeout,
+} from '@cucumber/cucumber';
 import { chromium, firefox, webkit, Browser, BrowserContext, BrowserType, Page } from 'playwright';
 import { fakerPT_BR } from '@faker-js/faker';
 import * as fs from 'fs';
@@ -29,6 +38,8 @@ function resolveBrowserType(): BrowserType {
 }
 
 const TRACES_DIR = 'traces';
+const VIDEOS_DIR = 'videos';
+const VIDEOS_TMP_DIR = path.join(VIDEOS_DIR, '.tmp');
 
 let browser: Browser;
 let context: BrowserContext;
@@ -47,7 +58,7 @@ let pendingAccountCleanupEmail: string | undefined;
 // Hooks
 Before(async () => {
   browser = await resolveBrowserType().launch({ headless: process.env.HEADLESS === 'true' });
-  context = await browser.newContext();
+  context = await browser.newContext({ recordVideo: { dir: VIDEOS_TMP_DIR } });
   await context.tracing.start({ screenshots: true, snapshots: true, sources: true });
   page = await context.newPage();
   loginPage = new LoginPage(page);
@@ -67,13 +78,16 @@ After(async function (scenario) {
     pendingAccountCleanupEmail = undefined;
   }
 
-  if (scenario.result?.status === Status.FAILED) {
+  const failed = scenario.result?.status === Status.FAILED;
+  const browserName = process.env.BROWSER ?? 'chromium';
+  const safeName = (scenario.pickle.name || 'cenario').replace(/[^a-zA-Z0-9-_]+/g, '-');
+  const video = page.video();
+
+  if (failed) {
     const screenshot = await page.screenshot();
     await this.attach(screenshot, 'image/png');
 
     fs.mkdirSync(TRACES_DIR, { recursive: true });
-    const browserName = process.env.BROWSER ?? 'chromium';
-    const safeName = (scenario.pickle.name || 'cenario').replace(/[^a-zA-Z0-9-_]+/g, '-');
     const tracePath = path.join(TRACES_DIR, `${safeName}-${browserName}-${Date.now()}.zip`);
     await context.tracing.stop({ path: tracePath });
     await this.attach(
@@ -83,7 +97,32 @@ After(async function (scenario) {
   } else {
     await context.tracing.stop();
   }
+
+  // O video so fica pronto depois que a page/context fecham - fechamos aqui
+  // (em vez de so no browser.close() final) para poder salvar/descartar o
+  // arquivo de forma confiavel antes de encerrar o browser.
+  await page.close();
+  await context.close();
+
+  if (video) {
+    if (failed) {
+      fs.mkdirSync(VIDEOS_DIR, { recursive: true });
+      const videoPath = path.join(VIDEOS_DIR, `${safeName}-${browserName}-${Date.now()}.webm`);
+      await video.saveAs(videoPath);
+      await this.attach(`Vídeo salvo em ${videoPath}`, 'text/plain');
+    }
+    await video.delete().catch(() => undefined);
+  }
+
   await browser.close();
+});
+
+// video.delete() falha silenciosamente para alguns vídeos de cenários que
+// passaram, de tempos em tempos (lock de arquivo do SO logo após o browser
+// fechar) - essa varredura final garante que a pasta temporária não acumula
+// lixo entre execuções, mesmo quando isso acontece.
+AfterAll(() => {
+  fs.rmSync(VIDEOS_TMP_DIR, { recursive: true, force: true });
 });
 
 // LOGIN STEPS
