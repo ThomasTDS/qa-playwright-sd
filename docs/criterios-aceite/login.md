@@ -8,7 +8,7 @@ Cenários executáveis: `features/login.feature`.
 - **Quero** fazer login informando e-mail e senha
 - **Para** acessar minha conta e concluir compras
 
-### Critério 1 – Login com credenciais válidas (TC-001)
+### Critério 1 – Login com credenciais válidas (TC-001, `@mobile`)
 
 - **Dado** que estou na página de login
 - **Quando** informo o e-mail e a senha de uma conta válida

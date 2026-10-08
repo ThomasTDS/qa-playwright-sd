@@ -8,18 +8,20 @@ Cenários executáveis: `features/products.feature`.
 - **Quero** buscar produtos e gerenciar o que está no meu carrinho
 - **Para** montar meu pedido antes de finalizar a compra
 
-### Critério 1 – Busca de produtos (TC-004)
+### Critério 1 – Busca de produtos (TC-004, `@mobile`)
 
 - **Dado** que estou na página de produtos
 - **Quando** busco por um termo (ex.: "Top")
 - **Então** devo ver os resultados da busca exibidos na tela
 
-### Critério 2 – Adicionar múltiplos produtos ao carrinho (TC-005)
+### Critério 2 – Adicionar múltiplos produtos ao carrinho (TC-005, `@mobile`)
 
 - **Dado** que estou na página de produtos
 - **Quando** adiciono mais de um produto ao carrinho
 - **E** acesso o carrinho
 - **Então** devo ver todos os produtos adicionados listados no carrinho
+
+> Durante a validação em mobile, anúncios do Google AdSense chegaram a interceptar cliques em botões reais da página (layout shift tardio sobrepondo conteúdo). Por isso o contexto de teste bloqueia os domínios de anúncio do Google (ver seção de testes mobile no README) — não é algo que estamos testando, e deixar passar geraria instabilidade sem relação com o comportamento real da aplicação.
 
 ### Critério 3 – Remover um produto do carrinho (TC-006)
 
