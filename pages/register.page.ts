@@ -67,7 +67,14 @@ export class RegisterPage {
 
   async deleteAccount() {
     await this.page.locator('a[href="/delete_account"]').click();
-    await expect(this.page.getByText('ACCOUNT DELETED!')).toBeVisible();
+    // Esse clique as vezes esbarra num erro 520 transitorio do Cloudflare
+    // na frente do site (investigado a fundo: nao e race condition do
+    // nosso codigo nem especifico de um navegador - a pagina chega a
+    // retornar literalmente "Web server is returning an unknown error").
+    // E raro (~1 em 10 execucoes, nos testes de investigacao) e o
+    // --retry no nivel do cenario (cucumber.js) ja absorve isso, porque
+    // reexecuta o fluxo inteiro, incluindo uma nova navegacao.
+    await expect(this.page.getByText('ACCOUNT DELETED!')).toBeVisible({ timeout: 10000 });
     await this.page.locator('[data-qa="continue-button"]').click();
   }
 }
