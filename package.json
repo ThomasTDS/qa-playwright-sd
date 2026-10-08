@@ -22,6 +22,9 @@
   "engines": {
     "node": ">=22"
   },
+  "overrides": {
+    "handlebars": "^4.7.10"
+  },
   "lint-staged": {
     "*.ts": [
       "eslint --fix",
@@ -51,6 +54,7 @@
     "prettier": "^3.9.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.70.0"
+    "typescript-eslint": "^8.70.0",
+    "zod": "^4.6.5"
   }
 }
