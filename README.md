@@ -4,6 +4,8 @@
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 ![node](https://img.shields.io/badge/node-%3E%3D22-brightgreen.svg)
 
+📊 **[Relatório Allure ao vivo](https://ThomasTDS.github.io/qa-playwright-sd/)** — atualizado automaticamente a cada execução na `main`.
+
 ## Descrição
 
 Este repositório contém testes automatizados do site **[automationexercise.com](https://automationexercise.com)** utilizando **Playwright**, **Cucumber (BDD/Gherkin)** e **Page Object Model (POM)**.
@@ -175,6 +177,8 @@ npm run allure:open       # abre o relatório gerado no navegador
 
 O Allure agrupa os cenários por feature/severidade, mostra histórico de execuções e é mais navegável que o HTML simples do Cucumber para investigar uma suíte grande.
 
+No CI, esse relatório é publicado automaticamente no **[GitHub Pages](https://ThomasTDS.github.io/qa-playwright-sd/)** a cada push na `main` e a cada execução diária agendada — sempre reflete o estado real da última execução, falhe ela ou não.
+
 > **Nota de configuração:** o formatter `allure-cucumberjs/reporter` não convive com os formatters de terminal `progress`/`summary` do Cucumber — ao combinar qualquer um deles, os arquivos de `allure-results/` simplesmente deixam de ser gerados, sem erro visível (parece bug de integração entre as duas libs). Por isso o `cucumber.js` usa só `allure-cucumberjs/reporter` + `html`, sem formatter de progresso no terminal — o trade-off é não ver mais o resumo `"N scenarios (N passed)"` direto no terminal/log do CI, só nos relatórios gerados.
 
 ---
@@ -217,7 +221,7 @@ O Allure agrupa os cenários por feature/severidade, mostra histórico de execu�
 
 ### CI/CD
 
-O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`) a cada push/PR para a `main` e diariamente às 06:00 UTC. Antes dos testes, o CI valida lint (`eslint`), formatação (`prettier --check`) e tipos (`tsc --noEmit`), quebrando o build se algo estiver fora do padrão. Os cenários rodam em paralelo (`parallel: 4` no `cucumber.js` — cada worker abre seu próprio navegador/contexto isolado, sem estado compartilhado entre eles), reduzindo bastante o tempo total de execução. O relatório HTML, o relatório Allure e os traces de falhas são publicados como artifacts de cada execução. A `main` é protegida: mudanças precisam passar por Pull Request com o check de testes verde. Cenários que falham são reexecutados automaticamente uma vez (`--retry 1`), para absorver instabilidades pontuais de rede sem mascarar bugs reais de código.
+O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`) a cada push/PR para a `main` e diariamente às 06:00 UTC. Antes dos testes, o CI valida lint (`eslint`), formatação (`prettier --check`) e tipos (`tsc --noEmit`), quebrando o build se algo estiver fora do padrão. Os cenários rodam em paralelo (`parallel: 4` no `cucumber.js` — cada worker abre seu próprio navegador/contexto isolado, sem estado compartilhado entre eles), reduzindo bastante o tempo total de execução. O relatório HTML, o relatório Allure e os traces de falhas são publicados como artifacts de cada execução; o relatório Allure da `main` também é publicado no GitHub Pages (link no topo deste README). A `main` é protegida: mudanças precisam passar por Pull Request com o check de testes verde. Cenários que falham são reexecutados automaticamente uma vez (`--retry 1`), para absorver instabilidades pontuais de rede sem mascarar bugs reais de código.
 
 ### Segurança da pipeline
 

@@ -86,3 +86,30 @@ jobs:
           name: playwright-traces
           path: traces/*.zip
           if-no-files-found: ignore
+
+  deploy-pages:
+    needs: test
+    if: always() && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Baixa o relatorio Allure gerado pelo job de testes
+        uses: actions/download-artifact@v7
+        with:
+          name: allure-report
+          path: allure-report
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: allure-report
+
+      - name: Publica no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
