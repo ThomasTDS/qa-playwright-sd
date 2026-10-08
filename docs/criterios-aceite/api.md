@@ -3,6 +3,8 @@
 Cenários executáveis: `features/api.feature`.
 
 > Estes cenários chamam a API REST pública do site diretamente (sem passar pela interface), validando o contrato da resposta. A API do Automation Exercise sempre responde HTTP 200 no nível de transporte — o resultado real da operação vem no campo `responseCode` do corpo JSON (200 para sucesso, 405 para método não suportado). Os critérios abaixo refletem esse comportamento específico da API, não uma convenção genérica de REST.
+>
+> Toda resposta é validada contra um schema ([Zod](https://zod.dev/), em `pages/api.schemas.ts`) construído a partir de respostas reais coletadas manualmente — não só os campos citados nos critérios abaixo, mas a estrutura inteira (tipo e presença de cada campo, incluindo objetos aninhados como `category` em produtos). Se o formato da resposta mudar, o teste falha com uma mensagem apontando exatamente qual campo não bateu, mesmo que esse campo não seja mencionado explicitamente em nenhum critério aqui.
 
 ## História de Usuário
 

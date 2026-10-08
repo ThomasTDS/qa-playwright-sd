@@ -215,7 +215,7 @@ No CI, esse relatório é publicado automaticamente no **[GitHub Pages](https://
 
 - Acessibilidade (passivo, com [axe-core](https://github.com/dequelabs/axe-core-npm)): verifica violações `critical`/`serious` nas páginas de login e produtos. Como a aplicação sob teste é de terceiros, o cenário não quebra o build — as violações encontradas são anexadas ao relatório HTML para documentação, no mesmo espírito da suíte de segurança.
 
-- Verificação de API: chama diretamente a API pública do automationexercise.com (`/api/productsList`, `/api/brandsList`, `/api/searchProduct`), sem passar pela interface, validando estrutura da resposta, presença de dados esperados e rejeição de método HTTP não suportado.
+- Verificação de API: chama diretamente a API pública do automationexercise.com (produtos, marcas, busca, login, conta de usuário), sem passar pela interface. Toda resposta é validada contra um schema ([Zod](https://zod.dev/), em `pages/api.schemas.ts`) construído a partir de respostas reais — não só os campos usados nas asserções, a estrutura inteira. Se a API mudar um campo que nenhum teste checa diretamente, o schema ainda pega.
 
 ---
 

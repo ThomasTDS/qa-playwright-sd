@@ -1,15 +1,14 @@
 import { APIResponse, Page, expect } from '@playwright/test';
 import { fakerPT_BR } from '@faker-js/faker';
+import {
+  ProductsListResponseSchema,
+  BrandsListResponseSchema,
+  MessageResponseSchema,
+  UserDetailResponseSchema,
+} from './api.schemas';
 
 const BASE_URL = process.env.BASE_URL ?? 'https://automationexercise.com/';
 const TEST_ACCOUNT_PASSWORD = 'Teste@123';
-
-interface Product {
-  id: number;
-  name: string;
-  price: string;
-  brand: string;
-}
 
 export class ApiPage {
   readonly page: Page;
@@ -35,34 +34,33 @@ export class ApiPage {
   async assertProductsListContains(productName: string) {
     const response = await this.getProductsList();
     expect(response.status()).toBe(200);
-    const body = await response.json();
+    const body = ProductsListResponseSchema.parse(await response.json());
     expect(body.responseCode).toBe(200);
-    const found = (body.products as Product[]).some((product) => product.name === productName);
+    const found = body.products.some((product) => product.name === productName);
     expect(found).toBe(true);
   }
 
   async assertBrandsListNotEmpty() {
     const response = await this.getBrandsList();
     expect(response.status()).toBe(200);
-    const body = await response.json();
+    const body = BrandsListResponseSchema.parse(await response.json());
     expect(body.responseCode).toBe(200);
-    expect(Array.isArray(body.brands)).toBe(true);
     expect(body.brands.length).toBeGreaterThan(0);
   }
 
   async assertSearchResultsContain(term: string, productName: string) {
     const response = await this.searchProducts(term);
     expect(response.status()).toBe(200);
-    const body = await response.json();
+    const body = ProductsListResponseSchema.parse(await response.json());
     expect(body.responseCode).toBe(200);
-    const found = (body.products as Product[]).some((product) => product.name === productName);
+    const found = body.products.some((product) => product.name === productName);
     expect(found).toBe(true);
   }
 
   async assertProductsListRejectsPost() {
     const response = await this.page.request.post(BASE_URL + 'api/productsList');
     expect(response.status()).toBe(200);
-    const body = await response.json();
+    const body = MessageResponseSchema.parse(await response.json());
     expect(body.responseCode).toBe(405);
   }
 
@@ -90,7 +88,7 @@ export class ApiPage {
       form: { email, password },
     });
     expect(response.status()).toBe(200);
-    const body = await response.json();
+    const body = MessageResponseSchema.parse(await response.json());
     expect(body.responseCode).toBe(200);
     expect(body.message).toBe('User exists!');
   }
@@ -100,7 +98,7 @@ export class ApiPage {
       form: { email, password },
     });
     expect(response.status()).toBe(200);
-    const body = await response.json();
+    const body = MessageResponseSchema.parse(await response.json());
     expect(body.responseCode).toBe(404);
     expect(body.message).toBe('User not found!');
   }
@@ -130,7 +128,7 @@ export class ApiPage {
       },
     });
     expect(response.status()).toBe(200);
-    const body = await response.json();
+    const body = MessageResponseSchema.parse(await response.json());
     expect(body.responseCode).toBe(201);
   }
 
@@ -139,7 +137,7 @@ export class ApiPage {
       form: { email, password: TEST_ACCOUNT_PASSWORD },
     });
     expect(response.status()).toBe(200);
-    const body = await response.json();
+    const body = MessageResponseSchema.parse(await response.json());
     expect(body.responseCode).toBe(200);
   }
 
@@ -156,7 +154,7 @@ export class ApiPage {
       BASE_URL + 'api/getUserDetailByEmail?email=' + encodeURIComponent(email)
     );
     expect(response.status()).toBe(200);
-    const body = await response.json();
+    const body = UserDetailResponseSchema.parse(await response.json());
     expect(body.responseCode).toBe(200);
     expect(body.user.email.toLowerCase()).toBe(email.toLowerCase());
   }
