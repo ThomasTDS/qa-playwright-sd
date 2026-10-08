@@ -164,7 +164,7 @@ docker run --rm --env-file .env -e BROWSER=firefox -v "$(pwd)/reports:/app/repor
 
 ### Relatório HTML
 
-Cada execução gera `reports/cucumber-report.html` (não versionado) com o resultado dos cenários. Testes que falham têm automaticamente um print da tela no momento da falha anexado ao relatório, além de um [trace do Playwright](https://playwright.dev/docs/trace-viewer) (`traces/*.zip`, não versionado) com a timeline completa da execução, DOM snapshots e código-fonte da ação que falhou. Para abrir um trace: `npx playwright show-trace traces/<arquivo>.zip`.
+Cada execução gera `reports/cucumber-report.html` (não versionado) com o resultado dos cenários. Testes que falham têm automaticamente um print da tela no momento da falha anexado ao relatório, um [trace do Playwright](https://playwright.dev/docs/trace-viewer) (`traces/*.zip`, não versionado) com a timeline completa da execução, DOM snapshots e código-fonte da ação que falhou, e um vídeo da execução do cenário (`videos/*.webm`, não versionado). Para abrir um trace: `npx playwright show-trace traces/<arquivo>.zip`. Cenários que passam gravam o vídeo normalmente, mas ele é descartado ao final — só os de cenários que falham são mantidos em disco.
 
 ### Relatório Allure
 
@@ -228,10 +228,6 @@ O projeto roda automaticamente via GitHub Actions (`.github/workflows/tests.yml`
 - `npm audit --audit-level=high` roda no CI a cada execução, quebrando o build se houver vulnerabilidade alta/crítica em dependências.
 - **Dependabot** ativo (`.github/dependabot.yml`): atualizações automáticas semanais de dependências npm e das actions do workflow, além de alertas de segurança nativos do GitHub.
 - Política de divulgação de vulnerabilidades em [SECURITY.md](SECURITY.md).
-
-### Próximos Passos (Melhorias Futuras)
-
-- Captura de vídeo em falhas (hoje já há print de tela e trace do Playwright).
 
 ---
 

@@ -87,6 +87,13 @@ jobs:
           path: traces/*.zip
           if-no-files-found: ignore
 
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: playwright-videos
+          path: videos/*.webm
+          if-no-files-found: ignore
+
   deploy-pages:
     needs: test
     if: always() && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
