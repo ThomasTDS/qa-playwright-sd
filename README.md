@@ -121,6 +121,22 @@ BROWSER=firefox npm test
 
 O CI roda a suíte completa nos três navegadores a cada execução.
 
+### Rodar com emulação de dispositivo mobile
+
+Cenários marcados com a tag `@mobile` (os mais sensíveis a layout: login, busca de produtos, carrinho e o fluxo completo de checkout) também rodam com emulação de um Pixel 7 (viewport, user agent e touch do dispositivo real, via o preset do próprio Playwright). Para rodar localmente:
+
+```
+# PowerShell
+$env:DEVICE="mobile"; npm test -- --tags "@mobile"
+
+# bash
+DEVICE=mobile npm test -- --tags "@mobile"
+```
+
+Com `DEVICE=mobile`, a variável `BROWSER` é ignorada e o Chromium é usado sempre — é o `defaultBrowserType` do próprio preset do Pixel 7 no Playwright. O CI roda esse subconjunto automaticamente a cada execução, além dos três navegadores desktop.
+
+> **Achado real ao validar isso:** em viewport mobile estreito, anúncios do Google AdSense (incluindo um widget "side rail" fixo) carregam de forma assíncrona e tardia, causando um layout shift grande o bastante pra sobrepor botões reais da página — reproduzido e confirmado via o log de actionability do Playwright (`<iframe ... title="Advertisement"> ... subtree intercepts pointer events`), tanto no botão "add to cart" quanto no modal de confirmação. É instabilidade real de terceiro, mas não é algo que faz sentido "esperar passar" com retry (às vezes persiste nas duas tentativas) nem contornar clicando em outro lugar (o anúncio pode acabar em qualquer posição). A solução foi bloquear as requisições aos domínios de anúncio do Google (`googlesyndication.com`, `doubleclick.net`, etc.) no contexto de teste — não é algo que estamos testando, é ruído de terceiro ortogonal ao comportamento da aplicação, o mesmo raciocínio de quem mockaria um widget de pagamento externo instável.
+
 ### Rodar contra outra URL
 
 Por padrão os testes apontam para `https://automationexercise.com/`. Para rodar contra outro ambiente, defina `BASE_URL`:
@@ -190,6 +206,8 @@ No CI, esse relatório é publicado automaticamente no **[GitHub Pages](https://
 - Page Object Model (POM): Separação de responsabilidades, com Pages encapsulando elementos e ações.
 
 - Testes End-to-End (E2E): Simulação de fluxos reais de usuário — login, cadastro, logout, busca de produtos, carrinho, checkout, contato e newsletter.
+
+- Multi-dispositivo: além dos três navegadores desktop, os cenários mais sensíveis a layout (login, busca, carrinho, checkout) rodam também com emulação de um Pixel 7 (tag `@mobile`), validando que o fluxo crítico funciona em viewport mobile.
 
 - Massa de dados dinâmica com [Faker.js](https://fakerjs.dev/) (locale pt-BR): o cenário de cadastro gera nome, e-mail, empresa, endereço e telefone diferentes a cada execução, evitando colisão com contas de execuções anteriores sem depender de timestamp no e-mail.
 

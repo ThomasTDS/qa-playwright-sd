@@ -1,12 +1,12 @@
 Feature: Busca de produtos e carrinho no Automation Exercise
 
-  @TC-004
+  @TC-004 @mobile
   Scenario: Buscar produtos e visualizar resultados
     Given que o usuário está na página de produtos
     When ele busca por "Top"
     Then ele deve ver resultados da busca
 
-  @TC-005
+  @TC-005 @mobile
   Scenario: Adicionar múltiplos produtos ao carrinho
     Given que o usuário está na página de produtos
     When ele adiciona os produtos "Blue Top" e "Men Tshirt" ao carrinho

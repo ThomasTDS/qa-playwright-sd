@@ -8,7 +8,17 @@ import {
   Status,
   setDefaultTimeout,
 } from '@cucumber/cucumber';
-import { chromium, firefox, webkit, Browser, BrowserContext, BrowserType, Page } from 'playwright';
+import {
+  chromium,
+  firefox,
+  webkit,
+  devices,
+  Browser,
+  BrowserContext,
+  BrowserContextOptions,
+  BrowserType,
+  Page,
+} from 'playwright';
 import { fakerPT_BR } from '@faker-js/faker';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -25,8 +35,20 @@ import { ApiPage } from '../pages/api.page';
 setDefaultTimeout(30000);
 
 const SUPPORTED_BROWSERS: Record<string, BrowserType> = { chromium, firefox, webkit };
+const MOBILE_DEVICE = 'Pixel 7';
+
+function isMobileRun(): boolean {
+  return process.env.DEVICE === 'mobile';
+}
 
 function resolveBrowserType(): BrowserType {
+  // A emulação de "Pixel 7" só faz sentido com Chromium (é o
+  // defaultBrowserType do próprio preset do Playwright para ela) -
+  // ignora o BROWSER informado quando DEVICE=mobile.
+  if (isMobileRun()) {
+    return chromium;
+  }
+
   const browserName = process.env.BROWSER ?? 'chromium';
   const browserType = SUPPORTED_BROWSERS[browserName];
   if (!browserType) {
@@ -37,9 +59,35 @@ function resolveBrowserType(): BrowserType {
   return browserType;
 }
 
+function resolveContextOptions(): BrowserContextOptions {
+  return isMobileRun() ? { ...devices[MOBILE_DEVICE] } : {};
+}
+
+// Usado para nomear arquivos de trace/vídeo de forma que fique claro, só
+// pelo nome, se a execução foi desktop num navegador específico ou mobile.
+function resolveRunLabel(): string {
+  return isMobileRun() ? 'mobile' : (process.env.BROWSER ?? 'chromium');
+}
+
 const TRACES_DIR = 'traces';
 const VIDEOS_DIR = 'videos';
 const VIDEOS_TMP_DIR = path.join(VIDEOS_DIR, '.tmp');
+
+// Anúncios do Google (AdSense) carregam de forma assíncrona e às vezes tardia,
+// causando layout shift grande o bastante pra sobrepor botões reais da
+// página (reproduzido e confirmado via Playwright: um iframe/widget de
+// anúncio interceptando cliques tanto no botão "add to cart" quanto no
+// modal de confirmação, principalmente em viewport mobile estreito). Isso
+// não é algo que queremos testar nem algo que o site controla diretamente -
+// é ruído de terceiro orthogonal ao comportamento da aplicação, então
+// bloqueamos essas requisições no contexto de teste.
+const AD_DOMAIN_PATTERNS = [
+  '**/*.googlesyndication.com/**',
+  '**/*.doubleclick.net/**',
+  '**/*.googleadservices.com/**',
+  '**/*adservice.google.com/**',
+  '**/*.google.com/pagead/**',
+];
 
 let browser: Browser;
 let context: BrowserContext;
@@ -58,7 +106,13 @@ let pendingAccountCleanupEmail: string | undefined;
 // Hooks
 Before(async () => {
   browser = await resolveBrowserType().launch({ headless: process.env.HEADLESS === 'true' });
-  context = await browser.newContext({ recordVideo: { dir: VIDEOS_TMP_DIR } });
+  context = await browser.newContext({
+    ...resolveContextOptions(),
+    recordVideo: { dir: VIDEOS_TMP_DIR },
+  });
+  for (const pattern of AD_DOMAIN_PATTERNS) {
+    await context.route(pattern, (route) => route.abort());
+  }
   await context.tracing.start({ screenshots: true, snapshots: true, sources: true });
   page = await context.newPage();
   loginPage = new LoginPage(page);
@@ -79,7 +133,7 @@ After(async function (scenario) {
   }
 
   const failed = scenario.result?.status === Status.FAILED;
-  const browserName = process.env.BROWSER ?? 'chromium';
+  const runLabel = resolveRunLabel();
   const safeName = (scenario.pickle.name || 'cenario').replace(/[^a-zA-Z0-9-_]+/g, '-');
   const video = page.video();
 
@@ -88,7 +142,7 @@ After(async function (scenario) {
     await this.attach(screenshot, 'image/png');
 
     fs.mkdirSync(TRACES_DIR, { recursive: true });
-    const tracePath = path.join(TRACES_DIR, `${safeName}-${browserName}-${Date.now()}.zip`);
+    const tracePath = path.join(TRACES_DIR, `${safeName}-${runLabel}-${Date.now()}.zip`);
     await context.tracing.stop({ path: tracePath });
     await this.attach(
       `Trace salvo em ${tracePath} (abrir com "npx playwright show-trace <arquivo>")`,
@@ -107,7 +161,7 @@ After(async function (scenario) {
   if (video) {
     if (failed) {
       fs.mkdirSync(VIDEOS_DIR, { recursive: true });
-      const videoPath = path.join(VIDEOS_DIR, `${safeName}-${browserName}-${Date.now()}.webm`);
+      const videoPath = path.join(VIDEOS_DIR, `${safeName}-${runLabel}-${Date.now()}.webm`);
       await video.saveAs(videoPath);
       await this.attach(`Vídeo salvo em ${videoPath}`, 'text/plain');
     }
@@ -120,9 +174,15 @@ After(async function (scenario) {
 // video.delete() falha silenciosamente para alguns vídeos de cenários que
 // passaram, de tempos em tempos (lock de arquivo do SO logo após o browser
 // fechar) - essa varredura final garante que a pasta temporária não acumula
-// lixo entre execuções, mesmo quando isso acontece.
+// lixo entre execuções, mesmo quando isso acontece. É só limpeza local em
+// melhor esforço: nunca deve derrubar a suíte, então qualquer erro (ex.:
+// EPERM se o SO ainda não liberou o arquivo) é silenciosamente ignorado.
 AfterAll(() => {
-  fs.rmSync(VIDEOS_TMP_DIR, { recursive: true, force: true });
+  try {
+    fs.rmSync(VIDEOS_TMP_DIR, { recursive: true, force: true });
+  } catch {
+    // melhor esforço - um arquivo residual aqui nao compromete a suite
+  }
 });
 
 // LOGIN STEPS

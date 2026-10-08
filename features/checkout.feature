@@ -1,6 +1,6 @@
 Feature: Checkout no Automation Exercise
 
-  @TC-007 @smoke
+  @TC-007 @smoke @mobile
   Scenario: Finalizar compra com sucesso
     Given que o usuário está na página de login
     When ele faz login com a conta de teste

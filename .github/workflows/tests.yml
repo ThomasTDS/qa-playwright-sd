@@ -63,6 +63,17 @@ jobs:
         if: always()
         run: mv reports/cucumber-report.html reports/cucumber-report-webkit.html
 
+      - name: Testes (Mobile - Pixel 7)
+        run: npm test -- --tags "@mobile" --retry 1
+        env:
+          HEADLESS: 'true'
+          DEVICE: mobile
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+      - name: Guarda relatorio (Mobile)
+        if: always()
+        run: mv reports/cucumber-report.html reports/cucumber-report-mobile.html
+
       - name: Gera relatorio Allure
         if: always()
         run: npm run allure:generate

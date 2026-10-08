@@ -1,6 +1,6 @@
 Feature: Login e cadastro no Automation Exercise
 
-  @TC-001
+  @TC-001 @mobile
   Scenario: Login com credenciais válidas
     Given que o usuário está na página de login
     When ele faz login com a conta de teste
