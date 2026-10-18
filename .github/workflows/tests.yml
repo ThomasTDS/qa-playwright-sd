@@ -117,7 +117,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Baixa o relatorio Allure gerado pelo job de testes
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: allure-report
           path: allure-report
