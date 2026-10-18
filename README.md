@@ -1,5 +1,7 @@
 # 🧪 QA Playwright + Cucumber - Automation Exercise
 
+**Português** · [English](README.en.md)
+
 ![tests](https://github.com/ThomasTDS/qa-playwright-sd/actions/workflows/tests.yml/badge.svg)
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 ![node](https://img.shields.io/badge/node-%3E%3D22-brightgreen.svg)
@@ -41,7 +43,8 @@ qa-playwright-sd/
 ├── Dockerfile             # Imagem para rodar os testes containerizados
 ├── LICENSE                # Licença MIT
 ├── SECURITY.md            # Política de divulgação de vulnerabilidades
-└── README.md              # Este arquivo
+├── README.md              # português (este arquivo)
+└── README.en.md           # inglês
 
 ```
 
